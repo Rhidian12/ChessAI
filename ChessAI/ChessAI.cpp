@@ -7,7 +7,7 @@ int main()
 {
     using namespace Integrian2D;
 
-    Core* pCore{ Core::CreateEngine(1080, 720, "ChessAI") };
+    Core* pCore{ Core::CreateEngine(720, 720, "ChessAI") };
 
     SceneManager::GetInstance()->AddScene(new ChessScene{ "ChessScene" });
 
