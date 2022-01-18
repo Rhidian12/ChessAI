@@ -1,9 +1,19 @@
-#include <iostream>
 #include <Core/Core.h>
+#include <SceneManager/SceneManager.h>
+
+#include "Scenes/ChessScene.h"
 
 int main()
 {
     using namespace Integrian2D;
 
-    std::cout << "Hello World!\n";
+    Core* pCore{ Core::CreateEngine(1080, 720, "ChessAI") };
+
+    SceneManager::GetInstance()->AddScene(new ChessScene{ "ChessScene" });
+
+    pCore->Run();
+
+    pCore->Cleanup();
+
+    return 0;
 }

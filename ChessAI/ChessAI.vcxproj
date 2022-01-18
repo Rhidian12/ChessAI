@@ -192,6 +192,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ChessAI.cpp" />
+    <ClCompile Include="Scenes\ChessScene.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Scenes\ChessScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
