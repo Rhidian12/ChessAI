@@ -193,12 +193,14 @@
   <ItemGroup>
     <ClCompile Include="ChessAI.cpp" />
     <ClCompile Include="Factories\Factories.cpp" />
+    <ClCompile Include="Piece\Pawn\Pawn.cpp" />
     <ClCompile Include="Piece\Piece.cpp" />
     <ClCompile Include="Scenes\ChessScene.cpp" />
     <ClCompile Include="TileComponent\TileComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Factories\Factories.h" />
+    <ClInclude Include="Piece\Pawn\Pawn.h" />
     <ClInclude Include="Piece\Piece.h" />
     <ClInclude Include="Scenes\ChessScene.h" />
     <ClInclude Include="TileComponent\TileComponent.h" />
