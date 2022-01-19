@@ -194,10 +194,12 @@
     <ClCompile Include="ChessAI.cpp" />
     <ClCompile Include="Factories\Factories.cpp" />
     <ClCompile Include="Scenes\ChessScene.cpp" />
+    <ClCompile Include="TileComponent\TileComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Factories\Factories.h" />
     <ClInclude Include="Scenes\ChessScene.h" />
+    <ClInclude Include="TileComponent\TileComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
