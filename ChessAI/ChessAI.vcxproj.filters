@@ -33,7 +33,7 @@
     <ClCompile Include="Piece\Pawn\Pawn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameInformation\GameInformation.cpp">
+    <ClCompile Include="Chessboard\Chessboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,7 +53,7 @@
     <ClInclude Include="Piece\Pawn\Pawn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameInformation\GameInformation.h">
+    <ClInclude Include="Chessboard\Chessboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

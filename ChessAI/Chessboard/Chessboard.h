@@ -7,10 +7,10 @@ namespace Integrian2D
 	class GameObject;
 }
 
-class GameInformation final
+class Chessboard final
 {
 public:
-	static GameInformation* const GetInstance() noexcept;
+	static Chessboard* const GetInstance() noexcept;
 	static void Cleanup() noexcept;
 
 	void SetTiles(const std::vector<Integrian2D::GameObject*>& tiles) noexcept;
@@ -18,9 +18,9 @@ public:
 	const std::vector<Integrian2D::GameObject*>& GetTiles() const noexcept;
 
 private:
-	GameInformation() = default;
+	Chessboard() = default;
 
-	inline static GameInformation* m_pInstance{};
+	inline static Chessboard* m_pInstance{};
 
 	std::vector<Integrian2D::GameObject*> m_Tiles{};
 };

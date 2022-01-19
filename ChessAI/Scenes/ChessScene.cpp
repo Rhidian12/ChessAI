@@ -4,7 +4,7 @@
 #include <TextureManager/TextureManager.h>
 
 #include "../Factories/Factories.h"
-#include "../GameInformation/GameInformation.h"
+#include "../Chessboard/Chessboard.h"
 
 ChessScene::ChessScene(const std::string& name)
 	: Scene{ name.c_str() }
@@ -12,7 +12,7 @@ ChessScene::ChessScene(const std::string& name)
 
 ChessScene::~ChessScene()
 {
-	GameInformation::Cleanup();
+	Chessboard::Cleanup();
 }
 
 void ChessScene::Start()
@@ -27,5 +27,5 @@ void ChessScene::Start()
 	for (GameObject* const pG : tiles)
 		AddGameObject("Tile", pG);
 
-	GameInformation::GetInstance()->SetTiles(tiles);
+	Chessboard::GetInstance()->SetTiles(tiles);
 }
