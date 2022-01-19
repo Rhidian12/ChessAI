@@ -21,9 +21,9 @@ public:
 	void SetPiece(Piece* const pPiece) noexcept;
 
 	Piece* const GetPiece() const noexcept;
+	Integrian2D::Point2f GetCenterOfTile() const noexcept;
 
 private:
-	/* [TODO] Add reference to piece in here */
 	float m_TileWidth;
 	float m_TileHeight;
 

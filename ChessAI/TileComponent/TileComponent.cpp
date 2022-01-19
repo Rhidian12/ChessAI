@@ -38,3 +38,15 @@ Piece* const TileComponent::GetPiece() const noexcept
 {
 	return m_pPiece;
 }
+
+Integrian2D::Point2f TileComponent::GetCenterOfTile() const noexcept
+{
+	using namespace Integrian2D;
+
+	Point2f center{ m_pOwner->pTransform->GetWorldPosition() };
+
+	center.x += m_TileWidth * 0.5f;
+	center.y += m_TileHeight * 0.5f;
+
+	return center;
+}
