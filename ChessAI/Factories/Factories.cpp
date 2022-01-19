@@ -16,7 +16,7 @@ namespace Factories
 
 		/* Chessboard has 8x8 tiles */
 
-		const Point2f windowDimensions{ Core::GetInstance()->GetWindowWidth(), Core::GetInstance()->GetWindowHeight() };
+		const Point2f windowDimensions{ static_cast<float>(Core::GetInstance()->GetWindowWidth()), static_cast<float>(Core::GetInstance()->GetWindowHeight()) };
 
 		const Point2f tileDimensions{ windowDimensions.x / 8.f, windowDimensions.y / 8.f };
 
@@ -29,7 +29,7 @@ namespace Factories
 			{
 				GameObject* pTile{ new GameObject{} };
 
-				if (counter % 2 == 0)
+				if (counter++ % 2 == 0)
 					pTile->AddComponent(new TileComponent{ pTile, tileDimensions.x, tileDimensions.y, TextureManager::GetInstance()->GetTexture("WhiteTile") });
 				else
 					pTile->AddComponent(new TileComponent{ pTile, tileDimensions.x, tileDimensions.y, TextureManager::GetInstance()->GetTexture("BlackTile") });
@@ -38,6 +38,7 @@ namespace Factories
 
 				tiles.push_back(pTile);
 			}
+			--counter;
 		}
 
 		return tiles;
