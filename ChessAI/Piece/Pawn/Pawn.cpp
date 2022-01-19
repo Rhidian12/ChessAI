@@ -6,15 +6,15 @@
 #include <GameObject/GameObject.h>
 #include <Components/TransformComponent/TransformComponent.h>
 
-Pawn::Pawn(Integrian2D::GameObject* const pOwner)
-	: Piece{ pOwner, TypeOfPiece::Pawn }
+Pawn::Pawn(Integrian2D::GameObject* const pOwner, Integrian2D::Texture* const pTexture)
+	: Piece{ pOwner, TypeOfPiece::Pawn, pTexture }
 	, m_HasMoved{}
 {
 }
 
 Integrian2D::Component* Pawn::Clone(Integrian2D::GameObject* pOwner) noexcept
 {
-	Pawn* pPawn{ new Pawn{ pOwner } };
+	Pawn* pPawn{ new Pawn{ pOwner, m_pTexture } };
 	pPawn->m_HasMoved = m_HasMoved;
 
 	return pPawn;

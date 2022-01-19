@@ -4,6 +4,11 @@
 
 #include <vector>
 
+namespace Integrian2D
+{
+	class Texture;
+}
+
 class TileComponent;
 
 enum class TypeOfPiece
@@ -20,9 +25,11 @@ enum class TypeOfPiece
 class Piece : public Integrian2D::Component
 {
 public:
-	Piece(Integrian2D::GameObject* const pOwner, const TypeOfPiece type);
+	Piece(Integrian2D::GameObject* const pOwner, const TypeOfPiece type, Integrian2D::Texture* const pTexture);
 
 	virtual Component* Clone(Integrian2D::GameObject*) noexcept = 0;
+
+	virtual void Render() const override;
 
 	virtual void Move(TileComponent* const pDestinationTile) noexcept = 0;
 
@@ -32,4 +39,5 @@ public:
 
 protected:
 	TypeOfPiece m_TypeOfPiece;
+	Integrian2D::Texture* m_pTexture;
 };
