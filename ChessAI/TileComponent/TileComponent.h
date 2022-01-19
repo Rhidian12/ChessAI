@@ -7,6 +7,8 @@ namespace Integrian2D
 	class Texture;
 }
 
+class Piece;
+
 class TileComponent final : public Integrian2D::Component
 {
 public:
@@ -16,10 +18,15 @@ public:
 
 	virtual void Render() const override;
 
+	void SetPiece(Piece* const pPiece) noexcept;
+
+	Piece* const GetPiece() const noexcept;
+
 private:
 	/* [TODO] Add reference to piece in here */
 	float m_TileWidth;
 	float m_TileHeight;
 
 	Integrian2D::Texture* m_pTexture;
+	Piece* m_pPiece;
 };

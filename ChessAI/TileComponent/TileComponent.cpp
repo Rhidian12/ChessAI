@@ -9,12 +9,17 @@ TileComponent::TileComponent(Integrian2D::GameObject* const pOwner, const float 
 	, m_TileWidth{ tileWidth }
 	, m_TileHeight{ tileHeight }
 	, m_pTexture{ pTexture }
+	, m_pPiece{}
 {
 }
 
 Integrian2D::Component* TileComponent::Clone(Integrian2D::GameObject* pOwner) noexcept
 {
-	return new TileComponent{ pOwner, m_TileWidth, m_TileHeight, m_pTexture };
+	TileComponent* pTile{ new TileComponent{ pOwner, m_TileWidth, m_TileHeight, m_pTexture } };
+
+	pTile->m_pPiece = m_pPiece;
+
+	return pTile;
 }
 
 void TileComponent::Render() const
@@ -22,4 +27,14 @@ void TileComponent::Render() const
 	using namespace Integrian2D;
 
 	Renderer::GetInstance()->RenderTexture(m_pTexture, PRectf{ m_pOwner->pTransform->GetWorldPosition(), m_TileWidth, m_TileHeight }, Rectf{});
+}
+
+void TileComponent::SetPiece(Piece* const pPiece) noexcept
+{
+	m_pPiece = pPiece;
+}
+
+Piece* const TileComponent::GetPiece() const noexcept
+{
+	return m_pPiece;
 }
