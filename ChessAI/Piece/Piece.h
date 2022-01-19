@@ -24,6 +24,8 @@ public:
 
 	virtual Component* Clone(Integrian2D::GameObject*) noexcept = 0;
 
+	virtual void Move(TileComponent* const pDestinationTile) noexcept = 0;
+
 	virtual std::vector<TileComponent*> GetPossibleMoves() const noexcept = 0;
 
 	TypeOfPiece GetTypeOfPiece() const noexcept;
