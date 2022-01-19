@@ -1,6 +1,10 @@
 #include "Chessboard.h"
 
+#include "../TileComponent/TileComponent.h"
+
 #include <Utils/Utils.h>
+#include <GameObject/GameObject.h>
+#include <Components/TransformComponent/TransformComponent.h>
 
 Chessboard* const Chessboard::GetInstance() noexcept
 {
@@ -18,6 +22,39 @@ void Chessboard::Cleanup() noexcept
 void Chessboard::SetTiles(const std::vector<Integrian2D::GameObject*>& tiles) noexcept
 {
     m_Tiles = tiles;
+}
+
+int Chessboard::GetTileIndex(const Integrian2D::GameObject* const pTile) const noexcept
+{
+    using namespace Integrian2D;
+
+    for (int i{}; i < m_Tiles.size(); ++i)
+        if (m_Tiles[i] == pTile)
+            return i;
+
+    return -1;
+}
+
+int Chessboard::GetTileIndex(const TileComponent* const pTile) const noexcept
+{
+    using namespace Integrian2D;
+
+    for (int i{}; i < m_Tiles.size(); ++i)
+        if (m_Tiles[i]->GetComponentByType<TileComponent>() == pTile)
+            return i;
+
+    return -1;
+}
+
+TileComponent* const Chessboard::GetTileComponent(const Integrian2D::Point2f& pos) const noexcept
+{
+    using namespace Integrian2D;
+
+    for (const GameObject* const pTile : m_Tiles)
+        if (pTile->pTransform->GetWorldPosition() == pos)
+            return pTile->GetComponentByType<TileComponent>();
+
+    return nullptr;
 }
 
 const std::vector<Integrian2D::GameObject*>& Chessboard::GetTiles() const noexcept

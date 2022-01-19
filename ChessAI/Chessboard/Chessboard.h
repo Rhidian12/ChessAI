@@ -1,11 +1,15 @@
 #pragma once
 
+#include <Math/TypeDefines.h>
+
 #include <vector>
 
 namespace Integrian2D
 {
 	class GameObject;
 }
+
+class TileComponent;
 
 class Chessboard final
 {
@@ -15,6 +19,9 @@ public:
 
 	void SetTiles(const std::vector<Integrian2D::GameObject*>& tiles) noexcept;
 
+	int GetTileIndex(const Integrian2D::GameObject* const pTile) const noexcept;
+	int GetTileIndex(const TileComponent* const pTile) const noexcept;
+	TileComponent* const GetTileComponent(const Integrian2D::Point2f& pos) const noexcept;
 	const std::vector<Integrian2D::GameObject*>& GetTiles() const noexcept;
 
 private:
