@@ -12,6 +12,8 @@ class TileComponent final : public Integrian2D::Component
 public:
 	TileComponent(Integrian2D::GameObject* const pOwner, const float tileWidth, const float tileHeight, Integrian2D::Texture* const pTexture);
 
+	virtual Integrian2D::Component* Clone(Integrian2D::GameObject* pOwner) noexcept override;
+
 	virtual void Render() const override;
 
 private:

@@ -12,6 +12,11 @@ TileComponent::TileComponent(Integrian2D::GameObject* const pOwner, const float 
 {
 }
 
+Integrian2D::Component* TileComponent::Clone(Integrian2D::GameObject* pOwner) noexcept
+{
+	return new TileComponent{ pOwner, m_TileWidth, m_TileHeight, m_pTexture };
+}
+
 void TileComponent::Render() const
 {
 	using namespace Integrian2D;
