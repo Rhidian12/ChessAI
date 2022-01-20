@@ -2,11 +2,6 @@
 
 #include "../Piece.h"
 
-namespace Integrian2D
-{
-	class Texture;
-}
-
 class Pawn final : public Piece
 {
 public:
