@@ -9,6 +9,5 @@ namespace Integrian2D
 
 namespace Factories
 {
-	/* [TODO] Finish function when Pieces are implemented */
 	[[nodiscard]] std::vector<Integrian2D::GameObject*> CreateChessboard() noexcept;
 }
