@@ -12,7 +12,4 @@ public:
 	virtual void Move(TileComponent* const pDestinationTile) noexcept override;
 
 	virtual std::vector<TileComponent*> GetPossibleMoves() const noexcept override;
-
-private:
-	bool m_HasMoved;
 };
