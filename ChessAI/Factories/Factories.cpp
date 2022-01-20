@@ -10,6 +10,7 @@
 #include "../Piece/Pawn/Pawn.h"
 #include "../Piece/Rook/Rook.h"
 #include "../Piece/Bishop/Bishop.h"
+#include "../Piece/Queen/Queen.h"
 
 namespace Factories
 {
@@ -91,6 +92,20 @@ namespace Factories
 			Texture* const pBlackBishop{ pTextureManager->GetTexture("BlackBishop") };
 			tiles[58]->AddComponent(new Rook{ tiles[58], pBlackBishop });
 			tiles[61]->AddComponent(new Rook{ tiles[61], pBlackBishop });
+		}
+#pragma endregion
+
+#pragma region Queens
+		{
+			/* Add White Queen */
+			Texture* const pWhiteQueen{ pTextureManager->GetTexture("WhiteQueen") };
+			tiles[4]->AddComponent(new Queen{ tiles[4], pWhiteQueen });
+		}
+
+		{
+			/* Add Black Queen */
+			Texture* const pBlackQueen{ pTextureManager->GetTexture("BlackQueen") };
+			tiles[60]->AddComponent(new Queen{ tiles[60], pBlackQueen });
 		}
 #pragma endregion
 
