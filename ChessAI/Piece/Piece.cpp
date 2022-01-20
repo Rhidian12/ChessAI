@@ -21,7 +21,7 @@ void Piece::Render() const
 
 	Point2f pos{ m_pTileComponent->GetCenterOfTile() };
 	pos.x -= m_pTexture->GetWidth() * 0.5f;
-	pos.y -= m_pTexture->GetHeight() * 0.5;
+	pos.y -= m_pTexture->GetHeight() * 0.5f;
 
 	Renderer::GetInstance()->RenderTexture(m_pTexture, PRectf{ pos, m_pTexture->GetWidth(), m_pTexture->GetHeight()}, Rectf{});
 }
