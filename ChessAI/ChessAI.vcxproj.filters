@@ -42,6 +42,9 @@
     <ClCompile Include="Piece\Bishop\Bishop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Piece\Queen\Queen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scenes\ChessScene.h">
@@ -66,6 +69,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Piece\Bishop\Bishop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Piece\Queen\Queen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

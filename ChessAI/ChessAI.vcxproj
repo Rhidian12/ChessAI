@@ -198,6 +198,7 @@
     <ClCompile Include="Piece\Pawn\Pawn.cpp" />
     <ClCompile Include="Piece\Piece.cpp" />
     <ClCompile Include="Piece\Rook\Rook.cpp" />
+    <ClCompile Include="Piece\Queen\Queen.cpp" />
     <ClCompile Include="Scenes\ChessScene.cpp" />
     <ClCompile Include="TileComponent\TileComponent.cpp" />
   </ItemGroup>
@@ -208,6 +209,7 @@
     <ClInclude Include="Piece\Pawn\Pawn.h" />
     <ClInclude Include="Piece\Piece.h" />
     <ClInclude Include="Piece\Rook\Rook.h" />
+    <ClInclude Include="Piece\Queen\Queen.h" />
     <ClInclude Include="Scenes\ChessScene.h" />
     <ClInclude Include="TileComponent\TileComponent.h" />
   </ItemGroup>
