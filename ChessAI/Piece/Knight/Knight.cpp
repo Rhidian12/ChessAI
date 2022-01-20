@@ -32,8 +32,5 @@ std::vector<TileComponent*> Knight::GetPossibleMoves() const noexcept
 	TileComponent* pTileComponent{};
 	int nextIndex{};
 
-	nextIndex = currentTileIndex + 10;
-	pTileComponent = pChessboard->GetTileComponent(nextIndex);
-
-
+	
 }
