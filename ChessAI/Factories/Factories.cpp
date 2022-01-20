@@ -7,12 +7,15 @@
 #include <Components/TransformComponent/TransformComponent.h>
 
 #include "../TileComponent/TileComponent.h"
+#include "../Piece/Pawn/Pawn.h"
 
 namespace Factories
 {
 	std::vector<Integrian2D::GameObject*> CreateChessboard() noexcept
 	{
 		using namespace Integrian2D;
+
+		const TextureManager* const pTextureManager{ TextureManager::GetInstance() };
 
 		/* Chessboard has 8x8 tiles */
 
@@ -23,16 +26,16 @@ namespace Factories
 		std::vector<GameObject*> tiles{};
 
 		int counter{};
-		for (int x{}; x < 8; ++x)
+		for (int y{}; y < 8; ++y)
 		{
-			for (int y{}; y < 8; ++y)
+			for (int x{}; x < 8; ++x)
 			{
 				GameObject* pTile{ new GameObject{} };
 
 				if (counter++ % 2 == 0)
-					pTile->AddComponent(new TileComponent{ pTile, tileDimensions.x, tileDimensions.y, TextureManager::GetInstance()->GetTexture("WhiteTile") });
+					pTile->AddComponent(new TileComponent{ pTile, tileDimensions.x, tileDimensions.y, pTextureManager->GetTexture("WhiteTile") });
 				else
-					pTile->AddComponent(new TileComponent{ pTile, tileDimensions.x, tileDimensions.y, TextureManager::GetInstance()->GetTexture("BlackTile") });
+					pTile->AddComponent(new TileComponent{ pTile, tileDimensions.x, tileDimensions.y, pTextureManager->GetTexture("BlackTile") });
 
 				pTile->pTransform->SetPosition(Point2f{ x * tileDimensions.x, y * tileDimensions.y });
 
@@ -40,6 +43,22 @@ namespace Factories
 			}
 			--counter;
 		}
+
+#pragma region Pawns
+		{
+			/* Add white pawns */
+			Texture* const pWhitePawn{ pTextureManager->GetTexture("WhitePawn") };
+			for (int i{ 8 }; i < 16; ++i)
+				tiles[i]->AddComponent(new Pawn{ tiles[i], pWhitePawn });
+		}
+
+		{
+			/* Add black pawns */
+			Texture* const pBlackPawn{ pTextureManager->GetTexture("BlackPawn") };
+			for (int i{ 48 }; i < 56; ++i)
+				tiles[i]->AddComponent(new Pawn{ tiles[i], pBlackPawn });
+		}
+#pragma endregion
 
 		return tiles;
 	}
