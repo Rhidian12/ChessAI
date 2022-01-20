@@ -40,4 +40,7 @@ public:
 protected:
 	TypeOfPiece m_TypeOfPiece;
 	Integrian2D::Texture* m_pTexture;
+
+private:
+	TileComponent* m_pTileComponent;
 };
