@@ -30,7 +30,7 @@ std::vector<TileComponent*> Bishop::GetPossibleMoves() const noexcept
 		/* Check top right */
 		for (int i{}; i < 7; ++i)
 		{
-			const int nextIndex{ currentTileIndex + i * 8 + 1 };
+			const int nextIndex{ currentTileIndex + i * 8 + i * 1 };
 
 			if (nextIndex > 63)
 				break;
@@ -45,7 +45,7 @@ std::vector<TileComponent*> Bishop::GetPossibleMoves() const noexcept
 		/* Check top left */
 		for (int i{}; i < 7; ++i)
 		{
-			const int nextIndex{ currentTileIndex + i * 8 - 1 };
+			const int nextIndex{ currentTileIndex + i * 8 - i * 1 };
 
 			if (nextIndex > 63)
 				break;
@@ -63,7 +63,7 @@ std::vector<TileComponent*> Bishop::GetPossibleMoves() const noexcept
 		/* Check bottom right */
 		for (int i{}; i < 7; ++i)
 		{
-			const int nextIndex{ currentTileIndex - i * 8 + 1 };
+			const int nextIndex{ currentTileIndex - i * 8 + i * 1 };
 
 			if (nextIndex < 0)
 				break;
@@ -78,7 +78,7 @@ std::vector<TileComponent*> Bishop::GetPossibleMoves() const noexcept
 		/* Check bottom left */
 		for (int i{}; i < 7; ++i)
 		{
-			const int nextIndex{ currentTileIndex - i * 8 - 1 };
+			const int nextIndex{ currentTileIndex - i * 8 - i * 1 };
 
 			if (nextIndex < 0)
 				break;
