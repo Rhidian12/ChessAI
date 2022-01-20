@@ -10,12 +10,15 @@ namespace Integrian2D
 }
 
 class TileComponent;
+class Piece;
 
 class Chessboard final
 {
 public:
 	static Chessboard* const GetInstance() noexcept;
 	static void Cleanup() noexcept;
+
+	~Chessboard() = default;
 
 	void SetTiles(const std::vector<Integrian2D::GameObject*>& tiles) noexcept;
 
