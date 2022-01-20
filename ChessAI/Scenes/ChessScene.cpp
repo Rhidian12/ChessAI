@@ -2,6 +2,7 @@
 
 #include <Texture/Texture.h>
 #include <TextureManager/TextureManager.h>
+#include <Input/InputManager/InputManager.h>
 
 #include "../Factories/Factories.h"
 #include "../Chessboard/Chessboard.h"
@@ -40,4 +41,11 @@ void ChessScene::Start()
 		AddGameObject("Tile", pG);
 
 	Chessboard::GetInstance()->SetTiles(tiles);
+}
+
+void ChessScene::Update()
+{
+	using namespace Integrian2D;
+
+
 }
