@@ -61,5 +61,7 @@ std::vector<TileComponent*> Pawn::GetPossibleMoves() const noexcept
 		}
 	}
 
+	/* [TODO] Should still check to take other pieces + en passant */
+
 	return possibleMoves;
 }
