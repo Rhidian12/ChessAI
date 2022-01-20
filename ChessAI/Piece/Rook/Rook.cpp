@@ -75,10 +75,10 @@ std::vector<TileComponent*> Rook::GetPossibleMoves() const noexcept
 		for (int verticalChange{ -7 }; verticalChange < 0; ++verticalChange)
 		{
 			/* Check if we're still in the same column */
-			if (pChessboard->GetColumnNumber(currentTileIndex + verticalChange) == currentCol)
+			if (pChessboard->GetColumnNumber(currentTileIndex + verticalChange * 8) == currentCol)
 			{
 				/* If there is no piece on the tile, we can move there */
-				TileComponent* const pTile{ pChessboard->GetTileComponent(currentTileIndex + verticalChange) };
+				TileComponent* const pTile{ pChessboard->GetTileComponent(currentTileIndex + verticalChange * 8) };
 				if (!pTile->GetPiece())
 					possibleMoves.push_back(pTile);
 				else /* we encountered a piece so we can't go further */
@@ -89,10 +89,10 @@ std::vector<TileComponent*> Rook::GetPossibleMoves() const noexcept
 		for (int verticalChange{ 1 }; verticalChange < 8; ++verticalChange)
 		{
 			/* Check if we're still in the same column */
-			if (pChessboard->GetColumnNumber(currentTileIndex + verticalChange) == currentCol)
+			if (pChessboard->GetColumnNumber(currentTileIndex + verticalChange * 8) == currentCol)
 			{
 				/* If there is no piece on the tile, we can move there */
-				TileComponent* const pTile{ pChessboard->GetTileComponent(currentTileIndex + verticalChange) };
+				TileComponent* const pTile{ pChessboard->GetTileComponent(currentTileIndex + verticalChange * 8) };
 				if (!pTile->GetPiece())
 					possibleMoves.push_back(pTile);
 				else /* we encountered a piece so we can't go further */
