@@ -23,6 +23,7 @@ std::vector<TileComponent*> Queen::GetPossibleMoves() const noexcept
 	/* A Queen can move unlimitedly horizontally, vertically and diagonally, until it encounters a piece or an edge */
 	/* Horizontal movement is index + 1 or index - 1 */
 	/* Vertical movement is index + 8 or index - 8 */
+	/* Moving diagonally is index + 8 + 1, index + 8 - 1, index - 8 + 1, index - 8 - 1 */
 
 	/* Only 7 tiles in both directions need to be checked at most */
 
