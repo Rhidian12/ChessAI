@@ -50,6 +50,20 @@ int Chessboard::GetTileIndex(const TileComponent* const pTile) const noexcept
 	return -1;
 }
 
+int Chessboard::GetRowNumber(const int index) const noexcept
+{
+	Integrian2D::ASSERT(index >= 0 && index < m_Tiles.size(), "Chessboard::GetRowNumber() > Index is out of bounds!");
+
+	return index / 8;
+}
+
+int Chessboard::GetColumnNumber(const int index) const noexcept
+{
+	Integrian2D::ASSERT(index >= 0 && index < m_Tiles.size(), "Chessboard::GetRowNumber() > Index is out of bounds!");
+
+	return index % 8;
+}
+
 TileComponent* const Chessboard::GetTileComponent(const Integrian2D::Point2f& pos) const noexcept
 {
 	using namespace Integrian2D;

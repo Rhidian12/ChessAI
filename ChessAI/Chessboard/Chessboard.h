@@ -24,6 +24,8 @@ public:
 
 	int GetTileIndex(const Integrian2D::GameObject* const pTile) const noexcept;
 	int GetTileIndex(const TileComponent* const pTile) const noexcept;
+	int GetRowNumber(const int index) const noexcept;
+	int GetColumnNumber(const int index) const noexcept;
 	TileComponent* const GetTileComponent(const Integrian2D::Point2f& pos) const noexcept;
 	TileComponent* const GetTileComponent(const int index) const noexcept;
 	const std::vector<Integrian2D::GameObject*>& GetTiles() const noexcept;
