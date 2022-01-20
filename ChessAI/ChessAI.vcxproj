@@ -191,6 +191,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Piece\Bishop\Bishop.cpp" />
     <ClCompile Include="ChessAI.cpp" />
     <ClCompile Include="Factories\Factories.cpp" />
     <ClCompile Include="Chessboard\Chessboard.cpp" />
@@ -201,6 +202,7 @@
     <ClCompile Include="TileComponent\TileComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Piece\Bishop\Bishop.h" />
     <ClInclude Include="Factories\Factories.h" />
     <ClInclude Include="Chessboard\Chessboard.h" />
     <ClInclude Include="Piece\Pawn\Pawn.h" />
