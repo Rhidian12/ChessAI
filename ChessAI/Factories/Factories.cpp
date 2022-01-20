@@ -8,6 +8,7 @@
 
 #include "../TileComponent/TileComponent.h"
 #include "../Piece/Pawn/Pawn.h"
+#include "../Piece/Rook/Rook.h"
 
 namespace Factories
 {
@@ -57,6 +58,22 @@ namespace Factories
 			Texture* const pBlackPawn{ pTextureManager->GetTexture("BlackPawn") };
 			for (int i{ 48 }; i < 56; ++i)
 				tiles[i]->AddComponent(new Pawn{ tiles[i], pBlackPawn });
+		}
+#pragma endregion
+
+#pragma region Rooks
+		{
+			/* Add White Rooks */
+			Texture* const pWhiteRook{ pTextureManager->GetTexture("WhiteRook") };
+			tiles[0]->AddComponent(new Rook{ tiles[0], pWhiteRook });
+			tiles[7]->AddComponent(new Rook{ tiles[7], pWhiteRook });
+		}
+
+		{
+			/* Add Black Rooks */
+			Texture* const pBlackRook{ pTextureManager->GetTexture("BlackRook") };
+			tiles[56]->AddComponent(new Rook{ tiles[56], pBlackRook });
+			tiles[63]->AddComponent(new Rook{ tiles[63], pBlackRook });
 		}
 #pragma endregion
 
