@@ -11,6 +11,7 @@
 #include "../Piece/Rook/Rook.h"
 #include "../Piece/Bishop/Bishop.h"
 #include "../Piece/Queen/Queen.h"
+#include "../Piece/King/King.h"
 
 namespace Factories
 {
@@ -106,6 +107,20 @@ namespace Factories
 			/* Add Black Queen */
 			Texture* const pBlackQueen{ pTextureManager->GetTexture("BlackQueen") };
 			tiles[60]->AddComponent(new Queen{ tiles[60], pBlackQueen });
+		}
+#pragma endregion
+
+#pragma region Kings
+		{
+			/* Add White King */
+			Texture* const pWhiteKing{ pTextureManager->GetTexture("WhiteKing") };
+			tiles[3]->AddComponent(new Queen{ tiles[3], pWhiteKing });
+		}
+
+		{
+			/* Add Black King */
+			Texture* const pBlackKing{ pTextureManager->GetTexture("BlackKing") };
+			tiles[59]->AddComponent(new Queen{ tiles[59], pBlackKing });
 		}
 #pragma endregion
 

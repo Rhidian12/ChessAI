@@ -31,6 +31,8 @@ void ChessScene::Start()
 	pTextureManager->AddTexture("BlackBishop", new Texture{ "Resources/Black_Bishop.png" });
 	pTextureManager->AddTexture("WhiteQueen", new Texture{ "Resources/White_Queen.png" });
 	pTextureManager->AddTexture("BlackQueen", new Texture{ "Resources/Black_Queen.png" });
+	pTextureManager->AddTexture("WhiteKing", new Texture{ "Resources/White_King.png" });
+	pTextureManager->AddTexture("BlackKing", new Texture{ "Resources/Black_King.png" });
 
 	std::vector<GameObject*> tiles{ Factories::CreateChessboard() };
 
