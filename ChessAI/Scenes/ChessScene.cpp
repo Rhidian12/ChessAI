@@ -19,8 +19,12 @@ void ChessScene::Start()
 {
 	using namespace Integrian2D;
 
-	TextureManager::GetInstance()->AddTexture("WhiteTile", new Texture{ "Resources/White_Tile.png" });
-	TextureManager::GetInstance()->AddTexture("BlackTile", new Texture{ "Resources/Black_Tile.png" });
+	TextureManager* const pTextureManager{ TextureManager::GetInstance() };
+
+	pTextureManager->AddTexture("WhiteTile", new Texture{ "Resources/White_Tile.png" });
+	pTextureManager->AddTexture("BlackTile", new Texture{ "Resources/Black_Tile.png" });
+	pTextureManager->AddTexture("WhitePawn", new Texture{ "Resources/White_Pawn.png" });
+	pTextureManager->AddTexture("BlackPawn", new Texture{ "Resources/Black_Pawn.png" });
 
 	std::vector<GameObject*> tiles{ Factories::CreateChessboard() };
 
