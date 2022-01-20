@@ -13,11 +13,6 @@ Integrian2D::Component* Rook::Clone(Integrian2D::GameObject* pOwner) noexcept
 	return new Rook{ pOwner, m_pTexture };
 }
 
-void Rook::Move(TileComponent* const pDestinationTile) noexcept
-{
-	pDestinationTile;
-}
-
 std::vector<TileComponent*> Rook::GetPossibleMoves() const noexcept
 {
 	std::vector<TileComponent*> possibleMoves{};

@@ -22,14 +22,7 @@ Integrian2D::Component* Pawn::Clone(Integrian2D::GameObject* pOwner) noexcept
 
 void Pawn::Move(TileComponent* const pDestinationTile) noexcept
 {
-	/* Remove the piece from the current tile */
-	Chessboard::GetInstance()->GetTileComponent(m_pOwner->pTransform->GetWorldPosition())->SetPiece(nullptr);
-
-	/* Set the piece to our destination tile */
-	pDestinationTile->SetPiece(this);
-
-	/* Set this piece's position to the center of the destination tile */
-	m_pOwner->pTransform->SetPosition(pDestinationTile->GetCenterOfTile());
+	Piece::Move(pDestinationTile);
 
 	m_HasMoved = true;
 }

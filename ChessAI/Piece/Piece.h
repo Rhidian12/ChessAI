@@ -31,7 +31,7 @@ public:
 
 	virtual void Render() const override;
 
-	virtual void Move(TileComponent* const pDestinationTile) noexcept = 0;
+	virtual void Move(TileComponent* const pDestinationTile) noexcept;
 
 	virtual std::vector<TileComponent*> GetPossibleMoves() const noexcept = 0;
 

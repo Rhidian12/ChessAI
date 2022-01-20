@@ -9,7 +9,5 @@ public:
 
 	virtual Component* Clone(Integrian2D::GameObject* pOwner) noexcept override;
 
-	virtual void Move(TileComponent* const pDestinationTile) noexcept override;
-
 	virtual std::vector<TileComponent*> GetPossibleMoves() const noexcept override;
 };
