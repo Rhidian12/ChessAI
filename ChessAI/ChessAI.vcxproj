@@ -196,6 +196,7 @@
     <ClCompile Include="Chessboard\Chessboard.cpp" />
     <ClCompile Include="Piece\Pawn\Pawn.cpp" />
     <ClCompile Include="Piece\Piece.cpp" />
+    <ClCompile Include="Piece\Rook\Rook.cpp" />
     <ClCompile Include="Scenes\ChessScene.cpp" />
     <ClCompile Include="TileComponent\TileComponent.cpp" />
   </ItemGroup>
@@ -204,6 +205,7 @@
     <ClInclude Include="Chessboard\Chessboard.h" />
     <ClInclude Include="Piece\Pawn\Pawn.h" />
     <ClInclude Include="Piece\Piece.h" />
+    <ClInclude Include="Piece\Rook\Rook.h" />
     <ClInclude Include="Scenes\ChessScene.h" />
     <ClInclude Include="TileComponent\TileComponent.h" />
   </ItemGroup>
