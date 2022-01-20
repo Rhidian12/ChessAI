@@ -30,6 +30,8 @@ void Pawn::Move(TileComponent* const pDestinationTile) noexcept
 
 	/* Set this piece's position to the center of the destination tile */
 	m_pOwner->pTransform->SetPosition(pDestinationTile->GetCenterOfTile());
+
+	m_HasMoved = true;
 }
 
 std::vector<TileComponent*> Pawn::GetPossibleMoves() const noexcept
