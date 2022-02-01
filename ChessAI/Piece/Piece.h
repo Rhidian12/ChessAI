@@ -21,6 +21,13 @@ enum class TypeOfPiece
 	King
 };
 
+enum class PieceColour
+{
+	White,
+	Black,
+	None
+};
+
 /* Other pieces inherit from this class */
 class Piece : public Integrian2D::Component
 {
@@ -35,10 +42,14 @@ public:
 
 	virtual std::vector<TileComponent*> GetPossibleMoves() const noexcept = 0;
 
+	void SetColourOfPiece(const PieceColour colour) noexcept;
+
 	TypeOfPiece GetTypeOfPiece() const noexcept;
+	PieceColour GetColourOfPiece() const noexcept;
 
 protected:
 	TypeOfPiece m_TypeOfPiece;
+	PieceColour m_PieceColour;
 	Integrian2D::Texture* m_pTexture;
 
 private:
