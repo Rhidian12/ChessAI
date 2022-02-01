@@ -40,7 +40,7 @@ std::vector<TileComponent*> Pawn::GetPossibleMoves() const noexcept
 	TileComponent* const pFirstTile{ pChessboard->GetTileComponent(currentTileIndex + 8) };
 
 	/* If there is no piece on the tile, we can move on it */
-	if (!pFirstTile->GetPiece())
+	if (pFirstTile->GetPiece()->GetColourOfPiece() != m_PieceColour)
 	{
 		possibleMoves.push_back(pFirstTile);
 
@@ -49,7 +49,7 @@ std::vector<TileComponent*> Pawn::GetPossibleMoves() const noexcept
 		{
 			TileComponent* const pSecondTile{ pChessboard->GetTileComponent(currentTileIndex + 16) };
 
-			if (!pSecondTile)
+			if (pSecondTile->GetPiece()->GetColourOfPiece() != m_PieceColour)
 				possibleMoves.push_back(pSecondTile);
 		}
 	}
