@@ -7,6 +7,7 @@
 #include <Components/TransformComponent/TransformComponent.h>
 #include <Input/InputManager/InputManager.h>
 #include <Renderer/Renderer.h>
+#include <Math/TypeDefines.h>
 
 #include "../Piece/Piece.h"
 

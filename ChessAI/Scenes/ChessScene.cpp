@@ -49,5 +49,5 @@ void ChessScene::Update()
 {
 	using namespace Integrian2D;
 
-
+	Chessboard::GetInstance()->Update();
 }
