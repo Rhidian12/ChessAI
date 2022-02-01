@@ -5,6 +5,15 @@
 #include <Utils/Utils.h>
 #include <GameObject/GameObject.h>
 #include <Components/TransformComponent/TransformComponent.h>
+#include <Input/InputManager/InputManager.h>
+#include <Renderer/Renderer.h>
+
+#include "../Piece/Piece.h"
+
+Chessboard::Chessboard()
+{
+	using namespace Integrian2D;
+}
 
 Chessboard* const Chessboard::GetInstance() noexcept
 {
@@ -17,6 +26,28 @@ Chessboard* const Chessboard::GetInstance() noexcept
 void Chessboard::Cleanup() noexcept
 {
 	Integrian2D::Utils::SafeDelete(m_pInstance);
+}
+
+void Chessboard::Update() noexcept
+{
+	using namespace Integrian2D;
+
+	const InputManager* const pInputManager{ InputManager::GetInstance() };
+	Renderer* const pRenderer{ Renderer::GetInstance() };
+
+	if (pInputManager->IsMouseButtonPressed(MouseButton::LMB))
+	{
+		TileComponent* pTile{ GetTileComponent(pInputManager->GetMousePosition()) };
+
+		/* Safety check */
+		if (pTile)
+		{
+			/* Does the tile have a piece */
+			if (const Piece* const pPiece{ pTile->GetPiece() }; pPiece != nullptr)
+				for (const TileComponent* const pPossibleMove : pPiece->GetPossibleMoves())
+					pRenderer->RenderFilledCircle(Circlef{ pPossibleMove->GetCenterOfTile(), 5.f });
+		}
+	}
 }
 
 void Chessboard::SetTiles(const std::vector<Integrian2D::GameObject*>& tiles) noexcept

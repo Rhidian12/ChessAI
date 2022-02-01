@@ -20,6 +20,8 @@ public:
 
 	~Chessboard() = default;
 
+	void Update() noexcept;
+
 	void SetTiles(const std::vector<Integrian2D::GameObject*>& tiles) noexcept;
 
 	int GetTileIndex(const Integrian2D::GameObject* const pTile) const noexcept;
@@ -31,7 +33,7 @@ public:
 	const std::vector<Integrian2D::GameObject*>& GetTiles() const noexcept;
 
 private:
-	Chessboard() = default;
+	Chessboard();
 
 	inline static Chessboard* m_pInstance{};
 
