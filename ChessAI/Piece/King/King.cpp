@@ -57,7 +57,7 @@ std::vector<TileComponent*> King::GetPossibleMoves() const noexcept
 
 			/* If there is no same coloured piece on the tile */
 			pTileComponent = pChessboard->GetTileComponent(nextIndex);
-			if (pTileComponent->GetPiece()->GetColourOfPiece() != m_PieceColour)
+			if (!pTileComponent->GetPiece() || (pTileComponent->GetPiece()->GetColourOfPiece() != m_PieceColour))
 				possibleMoves.push_back(pTileComponent);
 		}
 	}
