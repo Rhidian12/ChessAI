@@ -25,69 +25,41 @@ std::vector<TileComponent*> Bishop::GetPossibleMoves() const noexcept
 
 	/* Only 7 tiles in both directions need to be checked at most */
 
-	/* Check top movement */
+	constexpr int amountOfTilesToCheck{ 7 };
+	constexpr int amountOfIndicesToAdd{ 4 };
+	constexpr int indicesToAdd[amountOfIndicesToAdd]{ 9, 7, -9, -7 };
+
+	TileComponent* pTileComponent{};
+	int nextIndex{};
+
+	for (int i{}; i < amountOfIndicesToAdd; ++i)
 	{
-		/* Check top right */
-		for (int i{}; i < 7; ++i)
+		for (int amountOfTilesTravelled{}; amountOfTilesTravelled < amountOfTilesToCheck; ++amountOfTilesTravelled)
 		{
-			const int nextIndex{ currentTileIndex + i * 8 + i * 1 };
+			nextIndex = currentTileIndex + amountOfTilesTravelled * indicesToAdd[i];
+			if (Integrian2D::Utils::IsInRange(nextIndex, 0, 63))
+			{
+				/* Diagonal movement gets checked regardless in the Range check */
 
-			if (nextIndex > 63)
-				break;
+				pTileComponent = pChessboard->GetTileComponent(nextIndex);
 
-			TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-			if (!pTile->GetPiece())
-				possibleMoves.push_back(pTile);
-			else
-				break; /* we've encountered a piece so we can't move in that direction any longer*/
-		}
-
-		/* Check top left */
-		for (int i{}; i < 7; ++i)
-		{
-			const int nextIndex{ currentTileIndex + i * 8 - i * 1 };
-
-			if (nextIndex > 63)
-				break;
-
-			TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-			if (!pTile->GetPiece())
-				possibleMoves.push_back(pTile);
-			else
-				break; /* we've encountered a piece so we can't move in that direction any longer*/
-		}
-	}
-
-	/* Check bottom movement */
-	{
-		/* Check bottom right */
-		for (int i{}; i < 7; ++i)
-		{
-			const int nextIndex{ currentTileIndex - i * 8 + i * 1 };
-
-			if (nextIndex < 0)
-				break;
-
-			TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-			if (!pTile->GetPiece())
-				possibleMoves.push_back(pTile);
-			else
-				break; /* we've encountered a piece so we can't move in that direction any longer*/
-		}
-
-		/* Check bottom left */
-		for (int i{}; i < 7; ++i)
-		{
-			const int nextIndex{ currentTileIndex - i * 8 - i * 1 };
-
-			if (nextIndex < 0)
-				break;
-
-			TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-			if (!pTile->GetPiece())
-				possibleMoves.push_back(pTile);
-			else
-				break; /* we've encountered a piece so we can't move in that direction any longer*/
+				/* if there is no piece, we can move and further */
+				if (!pTileComponent->GetPiece())
+				{
+					possibleMoves.push_back(pTileComponent);
+				}
+				/* if there is an enemy piece we can move, but no further */
+				else if (pTileComponent->GetPiece()->GetColourOfPiece() != m_PieceColour)
+				{
+					possibleMoves.push_back(pTileComponent);
+					break;
+				}
+				/* if our piece is there, we can't move and no further */
+				else
+				{
+					break;
+				}
+			}
 		}
 	}
 
