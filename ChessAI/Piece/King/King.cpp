@@ -3,6 +3,8 @@
 #include "../../Chessboard/Chessboard.h"
 #include "../../TileComponent/TileComponent.h"
 
+#include <Utils/Utils.h>
+
 King::King(Integrian2D::GameObject* const pOwner, Integrian2D::Texture* const pTexture)
 	: Piece{ pOwner, TypeOfPiece::King, pTexture }
 {
@@ -24,134 +26,39 @@ std::vector<TileComponent*> King::GetPossibleMoves() const noexcept
 	/* Horizontal movement is index + 1 or index - 1 */
 	/* Vertical movement is index + 8 or index - 8 */
 	/* Moving diagonally is index + 8 + 1, index + 8 - 1, index - 8 + 1, index - 8 - 1 */
+	/* Only 1 tile in all directions need to be checked at most */
 
-	/* Only 1 tiles in all directions need to be checked at most */
+	constexpr int amountOfIndices{ 8 };
+	constexpr int indicesToAdd[amountOfIndices]{ 1, -1, 8, -8, 9, 7, -9, -7 };
 
-	/* Check horizontal tiles */
+
+	/* Check each possibility */
+
+	TileComponent* pTileComponent{};
+	int nextIndex{};
+	for (int i{}; i < amountOfIndices; ++i)
 	{
-		const int currentRow{ pChessboard->GetRowNumber(currentTileIndex) };
-
+		nextIndex = currentTileIndex + indicesToAdd[i];
+		if (Integrian2D::Utils::IsInRange(nextIndex, 0, 63))
 		{
-			const int nextIndex{ currentTileIndex - 1 };
-
-			if (nextIndex >= 0)
+			/* check horizontal movement if we're moving horizontally */
+			if (indicesToAdd[i] == 1 || indicesToAdd[i] == -1)
 			{
-				/* Check if we're still in the same row */
-				if (pChessboard->GetRowNumber(nextIndex) == currentRow)
-				{
-					/* If there is no piece on the tile, we can move there */
-					TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-					if (!pTile->GetPiece())
-						possibleMoves.push_back(pTile);
-				}
+				if (pChessboard->GetRowNumber(nextIndex) != pChessboard->GetRowNumber(currentTileIndex))
+					continue;
 			}
-		}
-
-		{
-			const int nextIndex{ currentTileIndex + 1 };
-
-			if (nextIndex <= 63)
+			/* Check vertical movement if we're moving vertically */
+			else if (indicesToAdd[i] == 8 || indicesToAdd[i] == -8)
 			{
-				/* Check if we're still in the same row */
-				if (pChessboard->GetRowNumber(nextIndex) == currentRow)
-				{
-					/* If there is no piece on the tile, we can move there */
-					TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-					if (!pTile->GetPiece())
-						possibleMoves.push_back(pTile);
-				}
+				if (pChessboard->GetColumnNumber(nextIndex) != pChessboard->GetColumnNumber(currentTileIndex))
+					continue;
 			}
-		}
-	}
+			/* Diagonal movement gets checked regardless in the Range check */
 
-	/* Check vertical tiles */
-	{
-		const int currentCol{ pChessboard->GetColumnNumber(currentTileIndex) };
-
-		{
-			const int nextIndex{ currentTileIndex - 8 };
-
-			if (nextIndex >= 0)
-			{
-				/* Check if we're still in the same column */
-				if (pChessboard->GetColumnNumber(nextIndex) == currentCol)
-				{
-					/* If there is no piece on the tile, we can move there */
-					TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-					if (!pTile->GetPiece())
-						possibleMoves.push_back(pTile);
-				}
-			}
-		}
-
-		{
-			const int nextIndex{ currentTileIndex + 8 };
-
-			if (nextIndex <= 63)
-			{
-				/* Check if we're still in the same column */
-				if (pChessboard->GetColumnNumber(nextIndex) == currentCol)
-				{
-					/* If there is no piece on the tile, we can move there */
-					TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-					if (!pTile->GetPiece())
-						possibleMoves.push_back(pTile);
-				}
-			}
-		}
-	}
-
-	/* Check top diagonal movement */
-	{
-		/* Check top right */
-		{
-			const int nextIndex{ currentTileIndex + 9 };
-
-			if (nextIndex <= 63)
-			{
-				TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-				if (!pTile->GetPiece())
-					possibleMoves.push_back(pTile);
-			}
-		}
-
-		/* Check top left */
-		{
-			const int nextIndex{ currentTileIndex + 7 };
-
-			if (nextIndex <= 63)
-			{
-				TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-				if (!pTile->GetPiece())
-					possibleMoves.push_back(pTile);
-			}
-		}
-	}
-
-	/* Check bottom diagonal movement */
-	{
-		/* Check bottom right */
-		{
-			const int nextIndex{ currentTileIndex - 9 };
-
-			if (nextIndex >= 0)
-			{
-				TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-				if (!pTile->GetPiece())
-					possibleMoves.push_back(pTile);
-			}
-		}
-
-		/* Check bottom left */
-		{
-			const int nextIndex{ currentTileIndex - 7 };
-
-			if (nextIndex >= 0)
-			{
-				TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-				if (!pTile->GetPiece())
-					possibleMoves.push_back(pTile);
-			}
+			/* If there is no same coloured piece on the tile */
+			pTileComponent = pChessboard->GetTileComponent(nextIndex);
+			if (pTileComponent->GetPiece()->GetColourOfPiece() != m_PieceColour)
+				possibleMoves.push_back(pTileComponent);
 		}
 	}
 
