@@ -26,86 +26,51 @@ std::vector<TileComponent*> Rook::GetPossibleMoves() const noexcept
 
 	/* Only 7 tiles in both directions need to be checked at most */
 
-	/* Check horizontal tiles */
+	constexpr int amountOfTilesToCheck{ 7 };
+	constexpr int amountOfIndicesToAdd{ 8 };
+	constexpr int indicesToAdd[amountOfIndicesToAdd]{ 1, -1, 8, -8 };
+
+	TileComponent* pTileComponent{};
+	int nextIndex{};
+
+	for (int i{}; i < amountOfIndicesToAdd; ++i)
 	{
-		const int currentRow{ pChessboard->GetRowNumber(currentTileIndex) };
-		for (int horizontalChange{ -7 }; horizontalChange < 0; ++horizontalChange)
+		for (int amountOfTilesTravelled{}; amountOfTilesTravelled < amountOfTilesToCheck; ++amountOfTilesTravelled)
 		{
-			const int nextIndex{ currentTileIndex + horizontalChange };
-
-			if (nextIndex < 0)
-				break;
-
-			/* Check if we're still in the same row */
-			if (pChessboard->GetRowNumber(nextIndex) == currentRow)
+			nextIndex = currentTileIndex + amountOfTilesTravelled * indicesToAdd[i];
+			if (Integrian2D::Utils::IsInRange(nextIndex, 0, 63))
 			{
-				/* If there is no piece on the tile, we can move there */
-				TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-				if (!pTile->GetPiece())
-					possibleMoves.push_back(pTile);
-				else /* we encountered a piece so we can't go further */
+				/* check horizontal movement if we're moving horizontally */
+				if (indicesToAdd[i] == 1 || indicesToAdd[i] == -1)
+				{
+					if (pChessboard->GetRowNumber(nextIndex) != pChessboard->GetRowNumber(currentTileIndex))
+						continue;
+				}
+				/* Check vertical movement if we're moving vertically */
+				else if (indicesToAdd[i] == 8 || indicesToAdd[i] == -8)
+				{
+					if (pChessboard->GetColumnNumber(nextIndex) != pChessboard->GetColumnNumber(currentTileIndex))
+						continue;
+				}
+
+				pTileComponent = pChessboard->GetTileComponent(nextIndex);
+
+				/* if there is no piece, we can move and further */
+				if (!pTileComponent->GetPiece())
+				{
+					possibleMoves.push_back(pTileComponent);
+				}
+				/* if there is an enemy piece we can move, but no further */
+				else if (pTileComponent->GetPiece()->GetColourOfPiece() != m_PieceColour)
+				{
+					possibleMoves.push_back(pTileComponent);
 					break;
-			}
-		}
-
-		for (int horizontalChange{ 1 }; horizontalChange < 8; ++horizontalChange)
-		{
-			const int nextIndex{ currentTileIndex + horizontalChange };
-
-			if (nextIndex > 63)
-				break;
-
-			/* Check if we're still in the same row */
-			if (pChessboard->GetRowNumber(nextIndex) == currentRow)
-			{
-				/* If there is no piece on the tile, we can move there */
-				TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-				if (!pTile->GetPiece())
-					possibleMoves.push_back(pTile);
-				else /* we encountered a piece so we can't go further */
+				}
+				/* if our piece is there, we can't move and no further */
+				else
+				{
 					break;
-			}
-		}
-	}
-
-	/* Check vertical tiles */
-	{
-		const int currentCol{ pChessboard->GetColumnNumber(currentTileIndex) };
-		for (int verticalChange{ -7 }; verticalChange < 0; ++verticalChange)
-		{
-			const int nextIndex{ currentTileIndex + verticalChange * 8 };
-
-			if (nextIndex < 0)
-				break;
-
-			/* Check if we're still in the same column */
-			if (pChessboard->GetColumnNumber(nextIndex) == currentCol)
-			{
-				/* If there is no piece on the tile, we can move there */
-				TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-				if (!pTile->GetPiece())
-					possibleMoves.push_back(pTile);
-				else /* we encountered a piece so we can't go further */
-					break;
-			}
-		}
-
-		for (int verticalChange{ 1 }; verticalChange < 8; ++verticalChange)
-		{
-			const int nextIndex{ currentTileIndex + verticalChange * 8 };
-
-			if (nextIndex > 63)
-				break;
-
-			/* Check if we're still in the same column */
-			if (pChessboard->GetColumnNumber(nextIndex) == currentCol)
-			{
-				/* If there is no piece on the tile, we can move there */
-				TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
-				if (!pTile->GetPiece())
-					possibleMoves.push_back(pTile);
-				else /* we encountered a piece so we can't go further */
-					break;
+				}
 			}
 		}
 	}
