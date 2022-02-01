@@ -119,8 +119,8 @@ namespace Factories
 		{
 			/* Add White Knights */
 			Texture* const pWhiteKnight{ pTextureManager->GetTexture("WhiteKnight") };
-			tiles[3]->AddComponent(new Knight{ tiles[3], pWhiteKnight });
-			tiles[3]->GetComponentByType<Knight>()->SetColourOfPiece(PieceColour::White);
+			tiles[1]->AddComponent(new Knight{ tiles[1], pWhiteKnight });
+			tiles[1]->GetComponentByType<Knight>()->SetColourOfPiece(PieceColour::White);
 
 			tiles[6]->AddComponent(new Knight{ tiles[6], pWhiteKnight });
 			tiles[6]->GetComponentByType<Knight>()->SetColourOfPiece(PieceColour::White);
@@ -129,8 +129,8 @@ namespace Factories
 		{
 			/* Add Black Knights */
 			Texture* const pBlackKnight{ pTextureManager->GetTexture("BlackKnight") };
-			tiles[59]->AddComponent(new Knight{ tiles[59], pBlackKnight });
-			tiles[59]->GetComponentByType<Knight>()->SetColourOfPiece(PieceColour::Black);
+			tiles[57]->AddComponent(new Knight{ tiles[57], pBlackKnight });
+			tiles[57]->GetComponentByType<Knight>()->SetColourOfPiece(PieceColour::Black);
 
 			tiles[62]->AddComponent(new Knight{ tiles[62], pBlackKnight });
 			tiles[62]->GetComponentByType<Knight>()->SetColourOfPiece(PieceColour::Black);
