@@ -22,7 +22,6 @@ namespace Commands
 	{
 		using namespace Integrian2D;
 
-		const InputManager* const pInputManager{ InputManager::GetInstance() };
 		Renderer* const pRenderer{ Renderer::GetInstance() };
 		Chessboard* const pChessboard{ Chessboard::GetInstance() };
 		const Point2f& mousePos{ InputManager::GetInstance()->GetMousePosition() };
