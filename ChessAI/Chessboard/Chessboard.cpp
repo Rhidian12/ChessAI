@@ -1,19 +1,25 @@
 #include "Chessboard.h"
 
-#include "../TileComponent/TileComponent.h"
-
 #include <Utils/Utils.h>
 #include <GameObject/GameObject.h>
 #include <Components/TransformComponent/TransformComponent.h>
 #include <Input/InputManager/InputManager.h>
 #include <Renderer/Renderer.h>
 #include <Math/TypeDefines.h>
+#include <SceneManager/SceneManager.h>
 
+#include "../TileComponent/TileComponent.h"
 #include "../Piece/Piece.h"
+#include "../Commands/Commands.h"
 
 Chessboard::Chessboard()
 {
 	using namespace Integrian2D;
+
+	InputManager::GetInstance()->AddCommand(
+		GameInput{ MouseButton::LMB },
+		new Commands::ClickChessboardCommand{ SceneManager::GetInstance()->GetScene("ChessScene") },
+		State::OnHeld);
 }
 
 Chessboard* const Chessboard::GetInstance() noexcept
@@ -32,23 +38,6 @@ void Chessboard::Cleanup() noexcept
 void Chessboard::Update() noexcept
 {
 	using namespace Integrian2D;
-
-	const InputManager* const pInputManager{ InputManager::GetInstance() };
-	Renderer* const pRenderer{ Renderer::GetInstance() };
-
-	if (pInputManager->IsMouseButtonPressed(MouseButton::LMB))
-	{
-		TileComponent* pTile{ GetTileComponent(pInputManager->GetMousePosition()) };
-
-		/* Safety check */
-		if (pTile)
-		{
-			/* Does the tile have a piece */
-			if (const Piece* const pPiece{ pTile->GetPiece() }; pPiece != nullptr)
-				for (const TileComponent* const pPossibleMove : pPiece->GetPossibleMoves())
-					pRenderer->RenderFilledCircle(Circlef{ pPossibleMove->GetCenterOfTile(), 5.f });
-		}
-	}
 }
 
 void Chessboard::SetTiles(const std::vector<Integrian2D::GameObject*>& tiles) noexcept
