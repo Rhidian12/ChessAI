@@ -191,6 +191,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Commands\Commands.cpp" />
     <ClCompile Include="Piece\Knight\Knight.cpp" />
     <ClCompile Include="Piece\King\King.cpp" />
     <ClCompile Include="Piece\Bishop\Bishop.cpp" />
@@ -205,6 +206,7 @@
     <ClCompile Include="TileComponent\TileComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Commands\Commands.h" />
     <ClInclude Include="Piece\Knight\Knight.h" />
     <ClInclude Include="Piece\King\King.h" />
     <ClInclude Include="Piece\Bishop\Bishop.h" />
