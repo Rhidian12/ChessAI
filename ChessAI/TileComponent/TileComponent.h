@@ -22,6 +22,8 @@ public:
 
 	Piece* const GetPiece() const noexcept;
 	Integrian2D::Point2f GetCenterOfTile() const noexcept;
+	float GetTileWidth() const noexcept;
+	float GetTileHeight() const noexcept;
 
 private:
 	float m_TileWidth;

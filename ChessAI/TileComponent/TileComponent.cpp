@@ -50,3 +50,13 @@ Integrian2D::Point2f TileComponent::GetCenterOfTile() const noexcept
 
 	return center;
 }
+
+float TileComponent::GetTileWidth() const noexcept
+{
+	return m_TileWidth;
+}
+
+float TileComponent::GetTileHeight() const noexcept
+{
+	return m_TileHeight;
+}
