@@ -10,12 +10,12 @@ namespace Integrian2D
 {
 	class FiniteStateMachine;
 
-	class State final : public BaseDecisionMaking
+	class FSMState final : public BaseDecisionMaking
 	{
 	public:
 		using Action = std::function<BehaviourState(Blackboard* const)>;
 
-		INTEGRIAN2D_API State(FiniteStateMachine* const pFSM, const Action& action);
+		INTEGRIAN2D_API FSMState(FiniteStateMachine* const pFSM, const Action& action);
 
 		INTEGRIAN2D_API virtual BehaviourState Update(Blackboard* const pBlackboard) override;
 
@@ -32,19 +32,19 @@ namespace Integrian2D
 	public:
 		using Predicate = std::function<bool(Blackboard* const)>;
 
-		INTEGRIAN2D_API Transition(FiniteStateMachine* const pFSM, State* const pFrom, State* const pTo, const Predicate& predicate);
+		INTEGRIAN2D_API Transition(FiniteStateMachine* const pFSM, FSMState* const pFrom, FSMState* const pTo, const Predicate& predicate);
 
 		INTEGRIAN2D_API bool Update(Blackboard* const pBlackboard);
 
 		INTEGRIAN2D_API FiniteStateMachine* const GetFiniteStateMachine() const noexcept;
-		INTEGRIAN2D_API State* const GetFrom() const noexcept;
-		INTEGRIAN2D_API State* const GetTo() const noexcept;
+		INTEGRIAN2D_API FSMState* const GetFrom() const noexcept;
+		INTEGRIAN2D_API FSMState* const GetTo() const noexcept;
 
 	private:
 		FiniteStateMachine* m_pFSM;
 		Predicate m_Predicate;
-		State* m_pFrom;
-		State* m_pTo;
+		FSMState* m_pFrom;
+		FSMState* m_pTo;
 	};
 
 	class FiniteStateMachine final : public BaseDecisionMaking
@@ -52,7 +52,7 @@ namespace Integrian2D
 	public:
 		INTEGRIAN2D_API FiniteStateMachine(BaseDecisionMaking* const pStartState);
 
-		INTEGRIAN2D_API void AddState(State* const pState) noexcept;
+		INTEGRIAN2D_API void AddState(FSMState* const pState) noexcept;
 		INTEGRIAN2D_API void AddTransition(Transition* const pTransition) noexcept;
 
 		INTEGRIAN2D_API virtual BehaviourState Update(Blackboard* const pBlackboard) override;
