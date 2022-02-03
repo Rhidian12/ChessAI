@@ -48,6 +48,16 @@ std::vector<TileComponent*> Knight::GetPossibleMoves() const noexcept
 		nextIndex = currentTileIndex + indicesToAdd[i];
 		if (Utils::IsInRange(nextIndex, 0, 63))
 		{
+			/* 0. - 3. must only go up or down 1 row */
+			if (Utils::IsInRange(i, 0, 3))
+				if (!Utils::AreEqual(fabs(pChessboard->GetRowNumber(nextIndex) - pChessboard->GetRowNumber(currentTileIndex)), 1.0))
+					continue;
+
+			/* 4. - 7. must only go up or down 2 rows */
+			if (Utils::IsInRange(i, 4, 7))
+				if (!Utils::AreEqual(fabs(pChessboard->GetRowNumber(nextIndex) - pChessboard->GetRowNumber(currentTileIndex)), 2.0))
+					continue;
+
 			/* If there is no same coloured piece on the tile */
 			pTileComponent = pChessboard->GetTileComponent(nextIndex);
 			if (!pTileComponent->GetPiece() || (pTileComponent->GetPiece()->GetColourOfPiece() != m_PieceColour))
