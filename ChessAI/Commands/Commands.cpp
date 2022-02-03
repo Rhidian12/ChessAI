@@ -19,7 +19,7 @@ namespace Commands
 
 	void LeftClickChessboardCommand::Execute()
 	{
-		Chessboard::GetInstance()->ToggleIsLMBClicked(__FILE__);
+		Chessboard::GetInstance()->ToggleIsLMBClicked(__FILE__, Integrian2D::InputManager::GetInstance()->GetMousePosition());
 	}
 
 	RightClickChessboardCommand::RightClickChessboardCommand(Integrian2D::Scene* const pScene)
@@ -28,6 +28,6 @@ namespace Commands
 
 	void RightClickChessboardCommand::Execute()
 	{
-		Chessboard::GetInstance()->ToggleIsRMBClicked(__FILE__);
+		Chessboard::GetInstance()->ToggleIsRMBClicked(__FILE__, Integrian2D::InputManager::GetInstance()->GetMousePosition());
 	}
 }

@@ -61,17 +61,16 @@ void Chessboard::RenderPossibleMoves() noexcept
 
 	Renderer* const pRenderer{ Renderer::GetInstance() };
 	Chessboard* const pChessboard{ Chessboard::GetInstance() };
-	const Point2f& mousePos{ InputManager::GetInstance()->GetMousePosition() };
 
-	const auto it{ std::find_if(pChessboard->GetTiles().cbegin(), pChessboard->GetTiles().cend(), [&mousePos](const GameObject* const pTile)->bool
+	const auto it{ std::find_if(pChessboard->GetTiles().cbegin(), pChessboard->GetTiles().cend(), [this](const GameObject* const pTile)->bool
 		{
 			const Point2f& pos{ pTile->pTransform->GetWorldPosition() };
 			TileComponent* const pTileComponent{ pTile->GetComponentByType<TileComponent>() };
 
-			if (mousePos.x <= pos.x || mousePos.x >= pos.x + pTileComponent->GetTileWidth())
+			if (m_MousePositionRMB.x <= pos.x || m_MousePositionRMB.x >= pos.x + pTileComponent->GetTileWidth())
 				return false;
 
-			if (mousePos.y <= pos.y || mousePos.y >= pos.y + pTileComponent->GetTileHeight())
+			if (m_MousePositionRMB.y <= pos.y || m_MousePositionRMB.y >= pos.y + pTileComponent->GetTileHeight())
 				return false;
 
 			return true;
@@ -168,16 +167,20 @@ const std::vector<Integrian2D::GameObject*>& Chessboard::GetTiles() const noexce
 	return m_Tiles;
 }
 
-void Chessboard::ToggleIsLMBClicked(const std::string& file) noexcept
+void Chessboard::ToggleIsLMBClicked(const std::string& file, const Integrian2D::Point2f& mousePos) noexcept
 {
 	Integrian2D::ASSERT(file.find("Commands.cpp") != std::string::npos, "Chessboard::SetIsLMBClicked() > Only Commands may call this function!");
 
 	m_IsLMBClicked = !m_IsLMBClicked;
+
+	m_MousePositionLMB = mousePos;
 }
 
-void Chessboard::ToggleIsRMBClicked(const std::string& file) noexcept
+void Chessboard::ToggleIsRMBClicked(const std::string& file, const Integrian2D::Point2f& mousePos) noexcept
 {
 	Integrian2D::ASSERT(file.find("Commands.cpp") != std::string::npos, "Chessboard::SetIsRMBClicked() > Only Commands may call this function!");
 
 	m_IsRMBClicked = !m_IsRMBClicked;
+
+	m_MousePositionRMB = mousePos;
 }

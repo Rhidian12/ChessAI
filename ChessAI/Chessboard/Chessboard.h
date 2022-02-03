@@ -32,8 +32,8 @@ public:
 	TileComponent* const GetTileComponent(const int index) const noexcept;
 	const std::vector<Integrian2D::GameObject*>& GetTiles() const noexcept;
 
-	void ToggleIsLMBClicked(const std::string& file) noexcept;
-	void ToggleIsRMBClicked(const std::string& file) noexcept;
+	void ToggleIsLMBClicked(const std::string& file, const Integrian2D::Point2f& mousePos) noexcept;
+	void ToggleIsRMBClicked(const std::string& file, const Integrian2D::Point2f& mousePos) noexcept;
 
 private:
 	Chessboard();
@@ -41,8 +41,12 @@ private:
 	void RenderPossibleMoves() noexcept;
 
 	inline static Chessboard* m_pInstance{};
+
 	bool m_IsRMBClicked;
 	bool m_IsLMBClicked;
+
+	Integrian2D::Point2f m_MousePositionRMB;
+	Integrian2D::Point2f m_MousePositionLMB;
 
 	std::vector<Integrian2D::GameObject*> m_Tiles{};
 };
