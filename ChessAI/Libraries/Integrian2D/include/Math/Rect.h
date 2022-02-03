@@ -13,17 +13,17 @@ namespace Integrian2D
 
 		/* A list of available operators:
 		   Assume Type is the templated Type provided to the Rect
-		   
+
 		   bool operator==(const Rect<Type>& r1, const Rect<Type>& r2)
 		   bool operator!=(const Rect<Type>& r1, const Rect<Type>& r2)
 		   */
 
-		 /* A list of available functions:
-			Assume Type is the templated Type provided to the Rect
+		   /* A list of available functions:
+			  Assume Type is the templated Type provided to the Rect
 
-			Type GetArea(const Rect<Type>& r)
-			=>		Returns the Rect's area
-		  */
+			  Type GetArea(const Rect<Type>& r)
+			  =>		Returns the Rect's area
+			*/
 
 	template<typename Type>
 	struct INTEGRIAN2D_API Rect
@@ -43,7 +43,7 @@ namespace Integrian2D
 		{}
 		explicit Rect(const Point<2, Type>& _xy, const Type _width, const Type _height)
 			: x{ _xy.x }
-			, y { _xy.y }
+			, y{ _xy.y }
 			, width{ _width }
 			, height{ _height }
 		{}
@@ -85,15 +85,11 @@ namespace Integrian2D
 #pragma region Data
 		union
 		{
-			Type data[2];
 #pragma warning ( push )
 #pragma warning ( disable : 4201 ) // Disable nameless struct warning
-			struct
-			{
-				Type x, y;
-				Point<2, Type> xy;
-			};
+			struct { Type x, y; };
 #pragma warning ( pop )
+			Point<2, Type> xy;
 		};
 
 		Type width, height;
