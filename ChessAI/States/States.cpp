@@ -39,7 +39,7 @@ namespace States
 			}) };
 
 		if (it == pTiles->cend())
-			return;
+			return BehaviourState::Success;
 
 		const TileComponent* const pTile{ (*it)->GetComponentByType<TileComponent>() };
 
@@ -59,6 +59,8 @@ namespace States
 				}
 			}
 		}
+
+		return BehaviourState::Success;
 	}
 }
 
