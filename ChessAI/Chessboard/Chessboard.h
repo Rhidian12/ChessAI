@@ -39,14 +39,18 @@ private:
 	Chessboard();
 	void HandleInput() noexcept;
 	void RenderPossibleMoves() noexcept;
+	void TryToSelectPiece() noexcept;
 
 	inline static Chessboard* m_pInstance{};
 
 	bool m_IsRMBClicked;
-	bool m_IsLMBClicked;
-
 	Integrian2D::Point2f m_MousePositionRMB;
+	
+	bool m_IsLMBClicked;
+	bool m_IsPieceSelected;
+	Piece* m_pSelectedPiece;
 	Integrian2D::Point2f m_MousePositionLMB;
+	
 
 	std::vector<Integrian2D::GameObject*> m_Tiles{};
 };

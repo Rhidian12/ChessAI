@@ -15,6 +15,10 @@
 Chessboard::Chessboard()
 	: m_IsRMBClicked{}
 	, m_IsLMBClicked{}
+	, m_MousePositionLMB{}
+	, m_MousePositionRMB{}
+	, m_IsPieceSelected{}
+	, m_pSelectedPiece{}
 {
 	using namespace Integrian2D;
 
@@ -53,6 +57,18 @@ void Chessboard::HandleInput() noexcept
 
 	if (m_IsRMBClicked)
 		RenderPossibleMoves();
+
+	if (m_IsLMBClicked)
+	{
+		if (m_IsPieceSelected)
+		{
+
+		}
+		else
+		{
+			TryToSelectPiece();
+		}
+	}
 }
 
 void Chessboard::RenderPossibleMoves() noexcept
@@ -60,9 +76,8 @@ void Chessboard::RenderPossibleMoves() noexcept
 	using namespace Integrian2D;
 
 	Renderer* const pRenderer{ Renderer::GetInstance() };
-	Chessboard* const pChessboard{ Chessboard::GetInstance() };
 
-	const auto it{ std::find_if(pChessboard->GetTiles().cbegin(), pChessboard->GetTiles().cend(), [this](const GameObject* const pTile)->bool
+	const auto it{ std::find_if(m_Tiles.cbegin(), m_Tiles.cend(), [this](const GameObject* const pTile)->bool
 		{
 			const Point2f& pos{ pTile->pTransform->GetWorldPosition() };
 			TileComponent* const pTileComponent{ pTile->GetComponentByType<TileComponent>() };
@@ -76,7 +91,7 @@ void Chessboard::RenderPossibleMoves() noexcept
 			return true;
 		}) };
 
-	if (it == pChessboard->GetTiles().cend())
+	if (it == m_Tiles.cend())
 		return;
 
 	const TileComponent* const pTile{ (*it)->GetComponentByType<TileComponent>() };
@@ -95,6 +110,41 @@ void Chessboard::RenderPossibleMoves() noexcept
 				const Rectf center{ pPossibleMove->GetCenterOfTile().x - 12.5f, pPossibleMove->GetCenterOfTile().y - 12.5f, 25.f, 25.f };
 				pRenderer->RenderFilledRectangle(center);
 			}
+		}
+	}
+}
+
+void Chessboard::TryToSelectPiece() noexcept
+{
+	using namespace Integrian2D;
+
+	const auto it{ std::find_if(m_Tiles.cbegin(), m_Tiles.cend(), [this](const GameObject* const pTile)->bool
+	{
+		const Point2f& pos{ pTile->pTransform->GetWorldPosition() };
+		TileComponent* const pTileComponent{ pTile->GetComponentByType<TileComponent>() };
+
+		if (m_MousePositionLMB.x <= pos.x || m_MousePositionLMB.x >= pos.x + pTileComponent->GetTileWidth())
+			return false;
+
+		if (m_MousePositionLMB.y <= pos.y || m_MousePositionLMB.y >= pos.y + pTileComponent->GetTileHeight())
+			return false;
+
+		return true;
+	}) };
+
+	if (it == m_Tiles.cend())
+		return;
+
+	TileComponent* const pTile{ (*it)->GetComponentByType<TileComponent>() };
+
+	/* Safety check */
+	if (pTile)
+	{
+		/* if the tile has a piece */
+		if (pTile->GetPiece())
+		{
+			m_pSelectedPiece = pTile->GetPiece();
+			m_IsPieceSelected = true;
 		}
 	}
 }
