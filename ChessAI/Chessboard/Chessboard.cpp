@@ -13,13 +13,10 @@
 #include "../Commands/Commands.h"
 
 Chessboard::Chessboard()
+	: m_IsRMBClicked{}
+	, m_IsLMBClicked{}
 {
 	using namespace Integrian2D;
-
-	InputManager::GetInstance()->AddCommand(
-		GameInput{ MouseButton::LMB },
-		new Commands::ClickChessboardCommand{ SceneManager::GetInstance()->GetScene("ChessScene") },
-		State::OnHeld);
 }
 
 Chessboard* const Chessboard::GetInstance() noexcept
@@ -37,7 +34,66 @@ void Chessboard::Cleanup() noexcept
 
 void Chessboard::Update() noexcept
 {
+	HandleInput();
+}
+
+void Chessboard::HandleInput() noexcept
+{
 	using namespace Integrian2D;
+
+	if (InputManager::GetInstance()->IsMouseButtonPressed(MouseButton::RMB))
+		m_IsRMBClicked = !m_IsRMBClicked;
+
+	if (InputManager::GetInstance()->IsMouseButtonPressed(MouseButton::LMB))
+		m_IsLMBClicked = !m_IsLMBClicked;
+
+	if (m_IsRMBClicked)
+		RenderPossibleMoves();
+}
+
+void Chessboard::RenderPossibleMoves() noexcept
+{
+	using namespace Integrian2D;
+
+	Renderer* const pRenderer{ Renderer::GetInstance() };
+	Chessboard* const pChessboard{ Chessboard::GetInstance() };
+	const Point2f& mousePos{ InputManager::GetInstance()->GetMousePosition() };
+
+	const auto it{ std::find_if(pChessboard->GetTiles().cbegin(), pChessboard->GetTiles().cend(), [&mousePos](const GameObject* const pTile)->bool
+		{
+			const Point2f& pos{ pTile->pTransform->GetWorldPosition() };
+			TileComponent* const pTileComponent{ pTile->GetComponentByType<TileComponent>() };
+
+			if (mousePos.x <= pos.x || mousePos.x >= pos.x + pTileComponent->GetTileWidth())
+				return false;
+
+			if (mousePos.y <= pos.y || mousePos.y >= pos.y + pTileComponent->GetTileHeight())
+				return false;
+
+			return true;
+		}) };
+
+	if (it == pChessboard->GetTiles().cend())
+		return;
+
+	const TileComponent* const pTile{ (*it)->GetComponentByType<TileComponent>() };
+
+	/* Safety check */
+	if (pTile)
+	{
+		/* Does the tile have a piece */
+		if (const Piece* const pPiece{ pTile->GetPiece() }; pPiece != nullptr)
+		{
+			auto moves{ pPiece->GetPossibleMoves() };
+			for (const TileComponent* const pPossibleMove : moves)
+			{
+				/* [TODO] Figure out why Circlef is causing linker issues! */
+				 //pRenderer->RenderFilledCircle(Circlef{pPossibleMove->GetCenterOfTile(), 5.f}); 
+				const Rectf center{ pPossibleMove->GetCenterOfTile().x - 12.5f, pPossibleMove->GetCenterOfTile().y - 12.5f, 25.f, 25.f };
+				pRenderer->RenderFilledRectangle(center);
+			}
+		}
+	}
 }
 
 void Chessboard::SetTiles(const std::vector<Integrian2D::GameObject*>& tiles) noexcept

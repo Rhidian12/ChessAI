@@ -34,8 +34,12 @@ public:
 
 private:
 	Chessboard();
+	void HandleInput() noexcept;
+	void RenderPossibleMoves() noexcept;
 
 	inline static Chessboard* m_pInstance{};
+	bool m_IsRMBClicked;
+	bool m_IsLMBClicked;
 
 	std::vector<Integrian2D::GameObject*> m_Tiles{};
 };
