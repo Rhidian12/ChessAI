@@ -17,6 +17,16 @@ Chessboard::Chessboard()
 	, m_IsLMBClicked{}
 {
 	using namespace Integrian2D;
+
+	InputManager::GetInstance()->AddCommand(
+		GameInput{ MouseButton::LMB },
+		new Commands::LeftClickChessboardCommand{ SceneManager::GetInstance()->GetScene("ChessScene") },
+		State::OnRelease);
+
+	InputManager::GetInstance()->AddCommand(
+		GameInput{ MouseButton::RMB },
+		new Commands::RightClickChessboardCommand{ SceneManager::GetInstance()->GetScene("ChessScene") },
+		State::OnRelease);
 }
 
 Chessboard* const Chessboard::GetInstance() noexcept
@@ -40,12 +50,6 @@ void Chessboard::Update() noexcept
 void Chessboard::HandleInput() noexcept
 {
 	using namespace Integrian2D;
-
-	if (InputManager::GetInstance()->IsMouseButtonPressed(MouseButton::RMB))
-		m_IsRMBClicked = !m_IsRMBClicked;
-
-	if (InputManager::GetInstance()->IsMouseButtonPressed(MouseButton::LMB))
-		m_IsLMBClicked = !m_IsLMBClicked;
 
 	if (m_IsRMBClicked)
 		RenderPossibleMoves();
@@ -162,4 +166,18 @@ TileComponent* const Chessboard::GetTileComponent(const int index) const noexcep
 const std::vector<Integrian2D::GameObject*>& Chessboard::GetTiles() const noexcept
 {
 	return m_Tiles;
+}
+
+void Chessboard::ToggleIsLMBClicked(const std::string& file) noexcept
+{
+	Integrian2D::ASSERT(file.find("Commands.cpp") != std::string::npos, "Chessboard::SetIsLMBClicked() > Only Commands may call this function!");
+
+	m_IsLMBClicked = !m_IsLMBClicked;
+}
+
+void Chessboard::ToggleIsRMBClicked(const std::string& file) noexcept
+{
+	Integrian2D::ASSERT(file.find("Commands.cpp") != std::string::npos, "Chessboard::SetIsRMBClicked() > Only Commands may call this function!");
+
+	m_IsRMBClicked = !m_IsRMBClicked;
 }

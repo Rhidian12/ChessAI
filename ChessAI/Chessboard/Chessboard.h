@@ -32,6 +32,9 @@ public:
 	TileComponent* const GetTileComponent(const int index) const noexcept;
 	const std::vector<Integrian2D::GameObject*>& GetTiles() const noexcept;
 
+	void ToggleIsLMBClicked(const std::string& file) noexcept;
+	void ToggleIsRMBClicked(const std::string& file) noexcept;
+
 private:
 	Chessboard();
 	void HandleInput() noexcept;

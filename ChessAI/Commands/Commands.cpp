@@ -13,4 +13,21 @@
 
 namespace Commands
 {
+	LeftClickChessboardCommand::LeftClickChessboardCommand(Integrian2D::Scene* const pScene)
+		: Command{ pScene }
+	{}
+
+	void LeftClickChessboardCommand::Execute()
+	{
+		Chessboard::GetInstance()->ToggleIsLMBClicked(__FILE__);
+	}
+
+	RightClickChessboardCommand::RightClickChessboardCommand(Integrian2D::Scene* const pScene)
+		: Command{ pScene }
+	{}
+
+	void RightClickChessboardCommand::Execute()
+	{
+		Chessboard::GetInstance()->ToggleIsRMBClicked(__FILE__);
+	}
 }
