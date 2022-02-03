@@ -40,6 +40,7 @@ private:
 	void HandleInput() noexcept;
 	void RenderPossibleMoves() noexcept;
 	void TryToSelectPiece() noexcept;
+	void TryToPlacePiece() noexcept;
 
 	inline static Chessboard* m_pInstance{};
 

@@ -62,7 +62,7 @@ void Chessboard::HandleInput() noexcept
 	{
 		if (m_IsPieceSelected)
 		{
-
+			TryToPlacePiece();
 		}
 		else
 		{
@@ -147,6 +147,14 @@ void Chessboard::TryToSelectPiece() noexcept
 			m_IsPieceSelected = true;
 		}
 	}
+}
+
+void Chessboard::TryToPlacePiece() noexcept
+{
+	if (!m_pSelectedPiece)
+		return;
+
+
 }
 
 void Chessboard::SetTiles(const std::vector<Integrian2D::GameObject*>& tiles) noexcept
