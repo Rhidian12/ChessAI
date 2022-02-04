@@ -66,7 +66,45 @@ namespace States
 
 	Integrian2D::BehaviourState SelectPiece(Integrian2D::Blackboard* const pBlackboard)
 	{
+		using namespace Integrian2D;
 
+		std::vector<GameObject*>* pTiles{ pBlackboard->GetData<std::vector<GameObject*>*>("Tiles") };
+		const Point2f& mousePos{ pBlackboard->GetData<Point2f>("LMBMousePosition") };
+
+		const auto it{ std::find_if(pTiles->cbegin(), pTiles->cend(), [&mousePos](const GameObject* const pTile)->bool
+			{
+				const Point2f& pos{ pTile->pTransform->GetWorldPosition() };
+				TileComponent* const pTileComponent{ pTile->GetComponentByType<TileComponent>() };
+
+				if (mousePos.x <= pos.x || mousePos.x >= pos.x + pTileComponent->GetTileWidth())
+					return false;
+
+				if (mousePos.y <= pos.y || mousePos.y >= pos.y + pTileComponent->GetTileHeight())
+					return false;
+
+				return true;
+			}) };
+
+		if (it == pTiles->cend())
+			return BehaviourState::Success;
+
+		const TileComponent* const pTile{ (*it)->GetComponentByType<TileComponent>() };
+
+		/* Safety check */
+		if (pTile)
+		{
+			/* Does the tile have a piece */
+			if (const Piece* const pPiece{ pTile->GetPiece() }; pPiece != nullptr)
+			{
+				pBlackboard->ChangeData("SelectedPiece", pPiece);
+
+				return BehaviourState::Success;
+			}
+			else
+				return BehaviourState::Running;
+		}
+
+		return BehaviourState::Running;
 	}
 }
 

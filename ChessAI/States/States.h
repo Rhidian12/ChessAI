@@ -30,7 +30,7 @@ Chessboard FSM:
                       │                      └────────────┘
                       │                              ▲
                       │                              │
-                      │                              │ HasUserLeftClicked
+                      │                              │ HasPieceBeenSelected
                       ▼                              │
                 ┌───────────────┐             ┌──────┴──────┐
                 │               │HasUserLeftCl│             │

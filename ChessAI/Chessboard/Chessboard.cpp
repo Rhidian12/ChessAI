@@ -28,19 +28,24 @@ Chessboard::Chessboard()
 	m_pBlackboard->AddData("LMBMousePosition", Point2f{});
 	m_pBlackboard->AddData("HasUserRightClicked", false);
 	m_pBlackboard->AddData("HasUserLeftClicked", false);
+	m_pBlackboard->AddData("SelectedPiece", static_cast<Piece*>(nullptr));
+	m_pBlackboard->AddData("OriginalTile", static_cast<TileComponent*>(nullptr));
 
-	FSMState* pNoInput{ new FSMState{ m_pFSM, &States::NoUserInput } };
-	FSMState* pRightClick{ new FSMState{ m_pFSM, &States::UserRightClick} };
+	FSMState* pNoInputState{ new FSMState{ m_pFSM, &States::NoUserInput } };
+	FSMState* pRightClickState{ new FSMState{ m_pFSM, &States::UserRightClick } };
+	FSMState* pSelectPieceState{ new FSMState{ m_pFSM, &States::SelectPiece } };
 
-	m_pFSM = new FiniteStateMachine{ m_pBlackboard, pNoInput };
+	m_pFSM = new FiniteStateMachine{ m_pBlackboard, pNoInputState };
 
-	m_pFSM->AddState(pRightClick);
+	m_pFSM->AddState(pRightClickState);
 
-	Transition* pToRightClick{ new Transition{ m_pFSM, pNoInput, pRightClick, &Transitions::HasUserRightClicked } };
-	Transition* pToNoUserInput{ new Transition{ m_pFSM, pRightClick, pNoInput, &Transitions::HasUserRightClicked } };
+	Transition* pFromNoInputToRightClick{ new Transition{ m_pFSM, pNoInputState, pRightClickState, &Transitions::HasUserRightClicked } };
+	Transition* pFromRightClickToNoUserInput{ new Transition{ m_pFSM, pRightClickState, pNoInputState, &Transitions::HasUserRightClicked } };
+	Transition* pFromNoInputToSelectPiece{ new Transition{ m_pFSM, pNoInputState, pSelectPieceState, &Transitions::HasUserLeftClicked } };
 
-	m_pFSM->AddTransition(pToNoUserInput);
-	m_pFSM->AddTransition(pToRightClick);
+	m_pFSM->AddTransition(pFromRightClickToNoUserInput);
+	m_pFSM->AddTransition(pFromNoInputToRightClick);
+	m_pFSM->AddTransition(pFromNoInputToSelectPiece);
 
 	InputManager::GetInstance()->AddCommand(
 		GameInput{ MouseButton::LMB },
