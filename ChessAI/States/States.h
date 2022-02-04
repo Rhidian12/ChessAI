@@ -20,6 +20,7 @@ namespace Transitions
 	bool HasUserRightClicked(Integrian2D::Blackboard* const pBlackboard);
 	bool HasUserLeftClicked(Integrian2D::Blackboard* const pBlackboard);
 	bool HasPieceBeenSelectedAndHasUserLeftClicked(Integrian2D::Blackboard* const pBlackboard);
+	bool WasPieceMoved(Integrian2D::Blackboard* const pBlackboard);
 }
 
 /*

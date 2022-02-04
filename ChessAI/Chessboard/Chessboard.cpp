@@ -30,6 +30,7 @@ Chessboard::Chessboard()
 	m_pBlackboard->AddData("HasUserLeftClicked", false);
 	m_pBlackboard->AddData("SelectedPiece", static_cast<Piece*>(nullptr));
 	m_pBlackboard->AddData("OriginalTile", static_cast<TileComponent*>(nullptr));
+	m_pBlackboard->AddData("WasPieceMoved", false);
 
 	FSMState* pNoInputState{ new FSMState{ m_pFSM, &States::NoUserInput } };
 	FSMState* pRightClickState{ new FSMState{ m_pFSM, &States::UserRightClick } };
@@ -44,11 +45,13 @@ Chessboard::Chessboard()
 	Transition* pFromRightClickToNoUserInput{ new Transition{ m_pFSM, pRightClickState, pNoInputState, &Transitions::HasUserRightClicked } };
 	Transition* pFromNoInputToSelectPiece{ new Transition{ m_pFSM, pNoInputState, pSelectPieceState, &Transitions::HasUserLeftClicked } };
 	Transition* pFromSelectPieceToMovePiece{ new Transition{ m_pFSM, pSelectPieceState, pMovePieceState, &Transitions::HasPieceBeenSelectedAndHasUserLeftClicked } };
+	Transition* pFromMovePieceToNoUserInput{ new Transition{ m_pFSM, pMovePieceState, pNoInputState, &Transitions::WasPieceMoved } };
 
 	m_pFSM->AddTransition(pFromRightClickToNoUserInput);
 	m_pFSM->AddTransition(pFromNoInputToRightClick);
 	m_pFSM->AddTransition(pFromNoInputToSelectPiece);
 	m_pFSM->AddTransition(pFromSelectPieceToMovePiece);
+	m_pFSM->AddTransition(pFromMovePieceToNoUserInput);
 
 	InputManager::GetInstance()->AddCommand(
 		GameInput{ MouseButton::LMB },

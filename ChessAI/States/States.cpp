@@ -156,6 +156,8 @@ namespace States
 				pClickedTile->SetPiece(pSelectedPiece);
 				pBlackboard->ChangeData("SelectedPiece", nullptr);
 
+				pBlackboard->ChangeData("WasPieceMoved", true);
+
 				return BehaviourState::Success;
 			}
 			else
@@ -204,5 +206,17 @@ namespace Transitions
 	bool HasPieceBeenSelectedAndHasUserLeftClicked(Integrian2D::Blackboard* const pBlackboard)
 	{
 		return pBlackboard->GetData<Piece*>("SelectedPiece") != nullptr && HasUserLeftClicked(pBlackboard);
+	}
+
+	bool WasPieceMoved(Integrian2D::Blackboard* const pBlackboard)
+	{
+		if (pBlackboard->GetData<bool>("WasPieceMoved"))
+		{
+			pBlackboard->ChangeData("WasPieceMoved", false);
+
+			return true;
+		}
+		else
+			return false;
 	}
 }
