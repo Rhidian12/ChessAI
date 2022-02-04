@@ -26,7 +26,18 @@ Chessboard::Chessboard()
 	m_pBlackboard->AddData("RMBMousePosition", Point2f{});
 	m_pBlackboard->AddData("HasUserRightClicked", false);
 
-	m_pFSM = new FiniteStateMachine{ m_pBlackboard, new FSMState{ m_pFSM, &States::NoUserInput } };
+	FSMState* pNoInput{ new FSMState{ m_pFSM, &States::NoUserInput } };
+	FSMState* pRightClick{ new FSMState{ m_pFSM, &States::UserRightClick} };
+
+	m_pFSM = new FiniteStateMachine{ m_pBlackboard, pNoInput };
+
+	m_pFSM->AddState(pRightClick);
+
+	Transition* pToRightClick{ new Transition{ m_pFSM, pNoInput, pRightClick, &Transitions::HasUserRightClicked } };
+	Transition* pToNoUserInput{ new Transition{ m_pFSM, pRightClick, pNoInput, &Transitions::HasUserRightClicked } };
+
+	m_pFSM->AddTransition(pToNoUserInput);
+	m_pFSM->AddTransition(pToRightClick);
 
 	InputManager::GetInstance()->AddCommand(
 		GameInput{ MouseButton::LMB },
@@ -55,6 +66,8 @@ void Chessboard::Cleanup() noexcept
 void Chessboard::Update() noexcept
 {
 	//HandleInput();
+
+	m_pFSM->Update();
 }
 
 void Chessboard::HandleInput() noexcept
