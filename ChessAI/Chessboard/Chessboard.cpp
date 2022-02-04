@@ -24,7 +24,9 @@ Chessboard::Chessboard()
 
 	m_pBlackboard->AddData("Tiles", &m_Tiles);
 	m_pBlackboard->AddData("RMBMousePosition", Point2f{});
+	m_pBlackboard->AddData("LMBMousePosition", Point2f{});
 	m_pBlackboard->AddData("HasUserRightClicked", false);
+	m_pBlackboard->AddData("HasUserLeftClicked", false);
 
 	FSMState* pNoInput{ new FSMState{ m_pFSM, &States::NoUserInput } };
 	FSMState* pRightClick{ new FSMState{ m_pFSM, &States::UserRightClick} };
