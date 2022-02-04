@@ -80,4 +80,19 @@ namespace Transitions
 			return false;
 		}
 	}
+
+	bool HasUserLeftClicked(Integrian2D::Blackboard* const pBlackboard)
+	{
+		if (pBlackboard->GetData<bool>("HasUserLeftClicked"))
+		{
+			pBlackboard->ChangeData("HasUserLeftClicked", false);
+			pBlackboard->ChangeData("LMBMousePosition", Integrian2D::InputManager::GetInstance()->GetMousePosition());
+
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

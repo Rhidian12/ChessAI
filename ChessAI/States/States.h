@@ -12,6 +12,7 @@ namespace States
 namespace Transitions
 {
 	bool HasUserRightClicked(Integrian2D::Blackboard* const pBlackboard);
+	bool HasUserLeftClicked(Integrian2D::Blackboard* const pBlackboard);
 }
 
 /*
