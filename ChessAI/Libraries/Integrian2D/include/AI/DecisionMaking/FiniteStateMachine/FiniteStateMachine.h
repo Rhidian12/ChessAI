@@ -17,6 +17,8 @@ namespace Integrian2D
 
 		INTEGRIAN2D_API FSMState(FiniteStateMachine* const pFSM, const Action& action);
 
+		INTEGRIAN2D_API virtual BaseDecisionMaking* Clone() noexcept override;
+
 		INTEGRIAN2D_API virtual BehaviourState Update(Blackboard* const pBlackboard) override;
 
 		INTEGRIAN2D_API FiniteStateMachine* const GetFiniteStateMachine() const noexcept;
@@ -33,6 +35,8 @@ namespace Integrian2D
 		using Predicate = std::function<bool(Blackboard* const)>;
 
 		INTEGRIAN2D_API Transition(FiniteStateMachine* const pFSM, FSMState* const pFrom, FSMState* const pTo, const Predicate& predicate);
+
+		INTEGRIAN2D_API Transition* Clone() noexcept;
 
 		INTEGRIAN2D_API bool Update(Blackboard* const pBlackboard);
 
@@ -51,6 +55,14 @@ namespace Integrian2D
 	{
 	public:
 		INTEGRIAN2D_API FiniteStateMachine(BaseDecisionMaking* const pStartState);
+		INTEGRIAN2D_API virtual ~FiniteStateMachine() override;
+
+		INTEGRIAN2D_API FiniteStateMachine(const FiniteStateMachine& other) noexcept;
+		INTEGRIAN2D_API FiniteStateMachine(FiniteStateMachine&& other) noexcept;
+		INTEGRIAN2D_API FiniteStateMachine& operator=(const FiniteStateMachine& other) noexcept;
+		INTEGRIAN2D_API FiniteStateMachine& operator=(FiniteStateMachine&& other) noexcept;
+
+		virtual BaseDecisionMaking* Clone() noexcept override;
 
 		INTEGRIAN2D_API void AddState(FSMState* const pState) noexcept;
 		INTEGRIAN2D_API void AddTransition(Transition* const pTransition) noexcept;

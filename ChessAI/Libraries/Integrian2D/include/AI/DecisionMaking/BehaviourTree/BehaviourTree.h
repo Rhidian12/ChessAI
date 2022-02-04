@@ -86,7 +86,7 @@ namespace Integrian2D
 	{
 	public:
 		INTEGRIAN2D_API BehaviourTree(const std::vector<BehaviourTreeNode*>& nodes);
-		INTEGRIAN2D_API ~BehaviourTree();
+		INTEGRIAN2D_API virtual ~BehaviourTree() override;
 
 		INTEGRIAN2D_API BehaviourTree(const BehaviourTree& other) noexcept;
 		INTEGRIAN2D_API BehaviourTree(BehaviourTree&& other) noexcept;
