@@ -139,4 +139,9 @@ namespace Transitions
 			return false;
 		}
 	}
+
+	bool HasPieceBeenSelected(Integrian2D::Blackboard* const pBlackboard)
+	{
+		return pBlackboard->GetData<Piece*>("SelectedPiece") != nullptr;
+	}
 }
