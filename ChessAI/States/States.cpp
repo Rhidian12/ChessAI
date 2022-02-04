@@ -10,7 +10,7 @@
 
 namespace States
 {
-	Integrian2D::BehaviourState NoUserInput(Integrian2D::Blackboard* const pBlackboard)
+	Integrian2D::BehaviourState NoUserInput(Integrian2D::Blackboard* const)
 	{
 		return Integrian2D::BehaviourState::Success;
 	}
