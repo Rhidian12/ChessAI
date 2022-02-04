@@ -85,7 +85,7 @@ namespace Integrian2D
 	class BehaviourTree final : public BaseDecisionMaking
 	{
 	public:
-		INTEGRIAN2D_API BehaviourTree(const std::vector<BehaviourTreeNode*>& nodes);
+		INTEGRIAN2D_API BehaviourTree(Blackboard* const pBlackboard, const std::vector<BehaviourTreeNode*>& nodes);
 		INTEGRIAN2D_API virtual ~BehaviourTree() override;
 
 		INTEGRIAN2D_API BehaviourTree(const BehaviourTree& other) noexcept;
@@ -95,7 +95,7 @@ namespace Integrian2D
 
 		INTEGRIAN2D_API virtual BaseDecisionMaking* Clone() noexcept override;
 
-		INTEGRIAN2D_API virtual BehaviourState Update(Blackboard* const pBlackboard) override;
+		INTEGRIAN2D_API virtual BehaviourState Update() override;
 
 	private:
 		std::vector<BehaviourTreeNode*> m_Nodes;

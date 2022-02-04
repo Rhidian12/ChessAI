@@ -10,16 +10,16 @@ namespace Integrian2D
 {
 	class FiniteStateMachine;
 
-	class FSMState final : public BaseDecisionMaking
+	class FSMState final
 	{
 	public:
 		using Action = std::function<BehaviourState(Blackboard* const)>;
 
 		INTEGRIAN2D_API FSMState(FiniteStateMachine* const pFSM, const Action& action);
 
-		INTEGRIAN2D_API virtual BaseDecisionMaking* Clone() noexcept override;
+		INTEGRIAN2D_API FSMState* Clone() noexcept;
 
-		INTEGRIAN2D_API virtual BehaviourState Update(Blackboard* const pBlackboard) override;
+		INTEGRIAN2D_API BehaviourState Update(Blackboard* const pBlackboard);
 
 		INTEGRIAN2D_API FiniteStateMachine* const GetFiniteStateMachine() const noexcept;
 		INTEGRIAN2D_API const Action& GetAction() const noexcept;
@@ -54,7 +54,7 @@ namespace Integrian2D
 	class FiniteStateMachine final : public BaseDecisionMaking
 	{
 	public:
-		INTEGRIAN2D_API FiniteStateMachine(BaseDecisionMaking* const pStartState);
+		INTEGRIAN2D_API FiniteStateMachine(Blackboard* const pBlackboard, FSMState* const pStartState);
 		INTEGRIAN2D_API virtual ~FiniteStateMachine() override;
 
 		INTEGRIAN2D_API FiniteStateMachine(const FiniteStateMachine& other) noexcept;
@@ -67,12 +67,12 @@ namespace Integrian2D
 		INTEGRIAN2D_API void AddState(FSMState* const pState) noexcept;
 		INTEGRIAN2D_API void AddTransition(Transition* const pTransition) noexcept;
 
-		INTEGRIAN2D_API virtual BehaviourState Update(Blackboard* const pBlackboard) override;
+		INTEGRIAN2D_API virtual BehaviourState Update() override;
 
 	private:
-		std::vector<BaseDecisionMaking*> m_pStates;
+		std::vector<FSMState*> m_pStates;
 		std::vector<Transition*> m_pTransitions;
 
-		BaseDecisionMaking* m_pCurrentState;
+		FSMState* m_pCurrentState;
 	};
 }

@@ -11,16 +11,18 @@ namespace Integrian2D
 	class INTEGRIAN2D_API BaseDecisionMaking
 	{
 	public:
-		BaseDecisionMaking();
-		virtual ~BaseDecisionMaking() = default;
+		BaseDecisionMaking(Blackboard* const pBlackboard);
+		virtual ~BaseDecisionMaking();
 
 		virtual BaseDecisionMaking* Clone() noexcept = 0;
 
-		virtual BehaviourState Update(Blackboard* const) = 0;
+		virtual BehaviourState Update() = 0;
 
 		BehaviourState GetCurrentState() const noexcept;
+		Blackboard* const GetBlackboard() const noexcept;
 
 	protected:
 		BehaviourState m_CurrentState;
+		Blackboard* m_pBlackboard;
 	};
 }
