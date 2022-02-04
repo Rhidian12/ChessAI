@@ -34,6 +34,7 @@ Chessboard::Chessboard()
 	FSMState* pNoInputState{ new FSMState{ m_pFSM, &States::NoUserInput } };
 	FSMState* pRightClickState{ new FSMState{ m_pFSM, &States::UserRightClick } };
 	FSMState* pSelectPieceState{ new FSMState{ m_pFSM, &States::SelectPiece } };
+	FSMState* pMovePieceState{ new FSMState{ m_pFSM, &States::MovePiece } };
 
 	m_pFSM = new FiniteStateMachine{ m_pBlackboard, pNoInputState };
 
@@ -42,10 +43,12 @@ Chessboard::Chessboard()
 	Transition* pFromNoInputToRightClick{ new Transition{ m_pFSM, pNoInputState, pRightClickState, &Transitions::HasUserRightClicked } };
 	Transition* pFromRightClickToNoUserInput{ new Transition{ m_pFSM, pRightClickState, pNoInputState, &Transitions::HasUserRightClicked } };
 	Transition* pFromNoInputToSelectPiece{ new Transition{ m_pFSM, pNoInputState, pSelectPieceState, &Transitions::HasUserLeftClicked } };
+	Transition* pFromSelectPieceToMovePiece{ new Transition{ m_pFSM, pSelectPieceState, pMovePieceState, &Transitions::HasPieceBeenSelectedAndHasUserLeftClicked } };
 
 	m_pFSM->AddTransition(pFromRightClickToNoUserInput);
 	m_pFSM->AddTransition(pFromNoInputToRightClick);
 	m_pFSM->AddTransition(pFromNoInputToSelectPiece);
+	m_pFSM->AddTransition(pFromSelectPieceToMovePiece);
 
 	InputManager::GetInstance()->AddCommand(
 		GameInput{ MouseButton::LMB },

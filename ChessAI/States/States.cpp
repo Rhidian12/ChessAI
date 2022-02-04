@@ -40,7 +40,7 @@ namespace States
 			}) };
 
 		if (it == pTiles->cend())
-			return BehaviourState::Success;
+			return BehaviourState::Running;
 
 		const TileComponent* const pTile{ (*it)->GetComponentByType<TileComponent>() };
 
@@ -86,7 +86,7 @@ namespace States
 			}) };
 
 		if (it == pTiles->cend())
-			return BehaviourState::Success;
+			return BehaviourState::Running;
 
 		const TileComponent* const pTile{ (*it)->GetComponentByType<TileComponent>() };
 
@@ -102,6 +102,67 @@ namespace States
 			}
 			else
 				return BehaviourState::Running;
+		}
+
+		return BehaviourState::Running;
+	}
+
+	Integrian2D::BehaviourState MovePiece(Integrian2D::Blackboard* const pBlackboard)
+	{
+		using namespace Integrian2D;
+
+		std::vector<GameObject*>* pTiles{ pBlackboard->GetData<std::vector<GameObject*>*>("Tiles") };
+		const Point2f& mousePos{ pBlackboard->GetData<Point2f>("LMBMousePosition") };
+		Piece* const pSelectedPiece{ pBlackboard->GetData<Piece*>("SelectedPiece") };
+
+		const auto it{ std::find_if(pTiles->cbegin(), pTiles->cend(), [&mousePos](const GameObject* const pTile)->bool
+			{
+				const Point2f& pos{ pTile->pTransform->GetWorldPosition() };
+				TileComponent* const pTileComponent{ pTile->GetComponentByType<TileComponent>() };
+
+				if (mousePos.x <= pos.x || mousePos.x >= pos.x + pTileComponent->GetTileWidth())
+					return false;
+
+				if (mousePos.y <= pos.y || mousePos.y >= pos.y + pTileComponent->GetTileHeight())
+					return false;
+
+				return true;
+			}) };
+
+		if (it == pTiles->cend())
+			return BehaviourState::Running;
+
+		TileComponent* const pClickedTile{ (*it)->GetComponentByType<TileComponent>() };
+
+		/* Safety check */
+		if (pClickedTile)
+		{
+			/* Check if the clicked tile is present in the selected piece's potential moves */
+			const std::vector<TileComponent*> potentialMoves{ pSelectedPiece->GetPossibleMoves() };
+
+			auto isMoveValid{ std::find(potentialMoves.cbegin(), potentialMoves.cend(), pClickedTile) };
+
+			if (isMoveValid != potentialMoves.cend())
+			{
+				/* Move the piece */
+
+				/* First tell the old tile it no longer has the piece */
+				pBlackboard->GetData<TileComponent*>("OriginalTile")->SetPiece(nullptr);
+
+				/* Next up, if there is a piece on the clicked tile, take it */
+				/* [TODO] Implement this */
+
+				/* Now, move the Selected Piece and set it to a nullptr in the blackboard */
+				pClickedTile->SetPiece(pSelectedPiece);
+				pBlackboard->ChangeData("SelectedPiece", nullptr);
+
+				return BehaviourState::Success;
+			}
+			else
+			{
+				/* The move is invalid */
+				return BehaviourState::Running;
+			}
 		}
 
 		return BehaviourState::Running;
@@ -140,8 +201,8 @@ namespace Transitions
 		}
 	}
 
-	bool HasPieceBeenSelected(Integrian2D::Blackboard* const pBlackboard)
+	bool HasPieceBeenSelectedAndHasUserLeftClicked(Integrian2D::Blackboard* const pBlackboard)
 	{
-		return pBlackboard->GetData<Piece*>("SelectedPiece") != nullptr;
+		return pBlackboard->GetData<Piece*>("SelectedPiece") != nullptr && HasUserLeftClicked(pBlackboard);
 	}
 }
