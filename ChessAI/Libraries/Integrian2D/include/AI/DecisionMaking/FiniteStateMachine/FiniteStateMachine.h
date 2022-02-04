@@ -62,7 +62,7 @@ namespace Integrian2D
 		INTEGRIAN2D_API FiniteStateMachine& operator=(const FiniteStateMachine& other) noexcept;
 		INTEGRIAN2D_API FiniteStateMachine& operator=(FiniteStateMachine&& other) noexcept;
 
-		virtual BaseDecisionMaking* Clone() noexcept override;
+		INTEGRIAN2D_API virtual BaseDecisionMaking* Clone() noexcept override;
 
 		INTEGRIAN2D_API void AddState(FSMState* const pState) noexcept;
 		INTEGRIAN2D_API void AddTransition(Transition* const pTransition) noexcept;
