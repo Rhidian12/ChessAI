@@ -7,20 +7,26 @@
 #include <Renderer/Renderer.h>
 #include <Math/TypeDefines.h>
 #include <SceneManager/SceneManager.h>
+#include <AI/DecisionMaking/FiniteStateMachine/FiniteStateMachine.h>
 
 #include "../TileComponent/TileComponent.h"
 #include "../Piece/Piece.h"
 #include "../Commands/Commands.h"
+#include "../States/States.h"
 
 Chessboard::Chessboard()
-	: m_IsRMBClicked{}
-	, m_IsLMBClicked{}
-	, m_MousePositionLMB{}
-	, m_MousePositionRMB{}
-	, m_IsPieceSelected{}
-	, m_pSelectedPiece{}
+	: m_pBlackboard{}
+	, m_pFSM{}
 {
 	using namespace Integrian2D;
+
+	m_pBlackboard = new Blackboard{};
+
+	m_pBlackboard->AddData("Tiles", &m_Tiles);
+	m_pBlackboard->AddData("RMBMousePosition", Point2f{});
+	m_pBlackboard->AddData("HasUserRightClicked", false);
+
+	m_pFSM = new FiniteStateMachine{ m_pBlackboard, new FSMState{ m_pFSM, &States::NoUserInput } };
 
 	InputManager::GetInstance()->AddCommand(
 		GameInput{ MouseButton::LMB },
@@ -48,113 +54,12 @@ void Chessboard::Cleanup() noexcept
 
 void Chessboard::Update() noexcept
 {
-	HandleInput();
+	//HandleInput();
 }
 
 void Chessboard::HandleInput() noexcept
 {
 	using namespace Integrian2D;
-
-	if (m_IsRMBClicked)
-		RenderPossibleMoves();
-
-	if (m_IsLMBClicked)
-	{
-		if (m_IsPieceSelected)
-		{
-			TryToPlacePiece();
-		}
-		else
-		{
-			TryToSelectPiece();
-		}
-	}
-}
-
-void Chessboard::RenderPossibleMoves() noexcept
-{
-	using namespace Integrian2D;
-
-	Renderer* const pRenderer{ Renderer::GetInstance() };
-
-	const auto it{ std::find_if(m_Tiles.cbegin(), m_Tiles.cend(), [this](const GameObject* const pTile)->bool
-		{
-			const Point2f& pos{ pTile->pTransform->GetWorldPosition() };
-			TileComponent* const pTileComponent{ pTile->GetComponentByType<TileComponent>() };
-
-			if (m_MousePositionRMB.x <= pos.x || m_MousePositionRMB.x >= pos.x + pTileComponent->GetTileWidth())
-				return false;
-
-			if (m_MousePositionRMB.y <= pos.y || m_MousePositionRMB.y >= pos.y + pTileComponent->GetTileHeight())
-				return false;
-
-			return true;
-		}) };
-
-	if (it == m_Tiles.cend())
-		return;
-
-	const TileComponent* const pTile{ (*it)->GetComponentByType<TileComponent>() };
-
-	/* Safety check */
-	if (pTile)
-	{
-		/* Does the tile have a piece */
-		if (const Piece* const pPiece{ pTile->GetPiece() }; pPiece != nullptr)
-		{
-			auto moves{ pPiece->GetPossibleMoves() };
-			for (const TileComponent* const pPossibleMove : moves)
-			{
-				/* [TODO] Figure out why Circlef is causing linker issues! */
-				 //pRenderer->RenderFilledCircle(Circlef{pPossibleMove->GetCenterOfTile(), 5.f}); 
-				const Rectf center{ pPossibleMove->GetCenterOfTile().x - 12.5f, pPossibleMove->GetCenterOfTile().y - 12.5f, 25.f, 25.f };
-				pRenderer->RenderFilledRectangle(center);
-			}
-		}
-	}
-}
-
-void Chessboard::TryToSelectPiece() noexcept
-{
-	using namespace Integrian2D;
-
-	const auto it{ std::find_if(m_Tiles.cbegin(), m_Tiles.cend(), [this](const GameObject* const pTile)->bool
-	{
-		const Point2f& pos{ pTile->pTransform->GetWorldPosition() };
-		TileComponent* const pTileComponent{ pTile->GetComponentByType<TileComponent>() };
-
-		if (m_MousePositionLMB.x <= pos.x || m_MousePositionLMB.x >= pos.x + pTileComponent->GetTileWidth())
-			return false;
-
-		if (m_MousePositionLMB.y <= pos.y || m_MousePositionLMB.y >= pos.y + pTileComponent->GetTileHeight())
-			return false;
-
-		return true;
-	}) };
-
-	if (it == m_Tiles.cend())
-		return;
-
-	TileComponent* const pTile{ (*it)->GetComponentByType<TileComponent>() };
-
-	/* Safety check */
-	if (pTile)
-	{
-		/* if the tile has a piece */
-		if (pTile->GetPiece())
-		{
-			m_pSelectedPiece = pTile->GetPiece();
-			m_IsPieceSelected = true;
-		}
-	}
-}
-
-void Chessboard::TryToPlacePiece() noexcept
-{
-	if (!m_pSelectedPiece)
-		return;
-
-
 }
 
 void Chessboard::SetTiles(const std::vector<Integrian2D::GameObject*>& tiles) noexcept
@@ -225,20 +130,16 @@ const std::vector<Integrian2D::GameObject*>& Chessboard::GetTiles() const noexce
 	return m_Tiles;
 }
 
-void Chessboard::ToggleIsLMBClicked(const std::string& file, const Integrian2D::Point2f& mousePos) noexcept
+void Chessboard::ToggleIsLMBClicked(const std::string& file) noexcept
 {
 	Integrian2D::ASSERT(file.find("Commands.cpp") != std::string::npos, "Chessboard::SetIsLMBClicked() > Only Commands may call this function!");
 
-	m_IsLMBClicked = !m_IsLMBClicked;
-
-	m_MousePositionLMB = mousePos;
+	m_pBlackboard->ChangeData("HasUserLeftClicked", true);
 }
 
-void Chessboard::ToggleIsRMBClicked(const std::string& file, const Integrian2D::Point2f& mousePos) noexcept
+void Chessboard::ToggleIsRMBClicked(const std::string& file) noexcept
 {
 	Integrian2D::ASSERT(file.find("Commands.cpp") != std::string::npos, "Chessboard::SetIsRMBClicked() > Only Commands may call this function!");
 
-	m_IsRMBClicked = !m_IsRMBClicked;
-
-	m_MousePositionRMB = mousePos;
+	m_pBlackboard->ChangeData("HasUserRightClicked", true);
 }

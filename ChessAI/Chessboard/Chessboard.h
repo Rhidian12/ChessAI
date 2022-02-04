@@ -7,6 +7,8 @@
 namespace Integrian2D
 {
 	class GameObject;
+	class FiniteStateMachine;
+	class Blackboard;
 }
 
 class TileComponent;
@@ -32,26 +34,17 @@ public:
 	TileComponent* const GetTileComponent(const int index) const noexcept;
 	const std::vector<Integrian2D::GameObject*>& GetTiles() const noexcept;
 
-	void ToggleIsLMBClicked(const std::string& file, const Integrian2D::Point2f& mousePos) noexcept;
-	void ToggleIsRMBClicked(const std::string& file, const Integrian2D::Point2f& mousePos) noexcept;
+	void ToggleIsLMBClicked(const std::string& file) noexcept;
+	void ToggleIsRMBClicked(const std::string& file) noexcept;
 
 private:
 	Chessboard();
 	void HandleInput() noexcept;
-	void RenderPossibleMoves() noexcept;
-	void TryToSelectPiece() noexcept;
-	void TryToPlacePiece() noexcept;
 
 	inline static Chessboard* m_pInstance{};
 
-	bool m_IsRMBClicked;
-	Integrian2D::Point2f m_MousePositionRMB;
+	Integrian2D::Blackboard* m_pBlackboard;
+	Integrian2D::FiniteStateMachine* m_pFSM;
 	
-	bool m_IsLMBClicked;
-	bool m_IsPieceSelected;
-	Piece* m_pSelectedPiece;
-	Integrian2D::Point2f m_MousePositionLMB;
-	
-
 	std::vector<Integrian2D::GameObject*> m_Tiles{};
 };
