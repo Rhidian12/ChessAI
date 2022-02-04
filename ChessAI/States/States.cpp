@@ -1,5 +1,6 @@
 #include "States.h"
 
+#include <AI/Blackboard/Blackboard.h>
 #include <Input/InputManager/InputManager.h>
 #include <Renderer/Renderer.h>
 #include <Components/TransformComponent/TransformComponent.h>
@@ -61,6 +62,11 @@ namespace States
 		}
 
 		return BehaviourState::Success;
+	}
+
+	Integrian2D::BehaviourState SelectPiece(Integrian2D::Blackboard* const pBlackboard)
+	{
+
 	}
 }
 

@@ -8,6 +8,7 @@
 #include <Math/TypeDefines.h>
 #include <SceneManager/SceneManager.h>
 #include <AI/DecisionMaking/FiniteStateMachine/FiniteStateMachine.h>
+#include <AI/Blackboard/Blackboard.h>
 
 #include "../TileComponent/TileComponent.h"
 #include "../Piece/Piece.h"

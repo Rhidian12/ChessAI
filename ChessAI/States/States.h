@@ -1,12 +1,17 @@
 ﻿#pragma once
 
-#include <AI/Blackboard/Blackboard.h>
 #include <AI/DecisionMaking/FiniteStateMachine/FiniteStateMachine.h>
+
+namespace Integrian2D
+{
+    class Blackboard;
+}
 
 namespace States
 {
 	Integrian2D::BehaviourState NoUserInput(Integrian2D::Blackboard* const pBlackboard);
 	Integrian2D::BehaviourState UserRightClick(Integrian2D::Blackboard* const pBlackboard);
+    Integrian2D::BehaviourState SelectPiece(Integrian2D::Blackboard* const pBlackboard);
 }
 
 namespace Transitions
