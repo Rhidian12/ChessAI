@@ -97,6 +97,7 @@ namespace States
 			if (const Piece* const pPiece{ pTile->GetPiece() }; pPiece != nullptr)
 			{
 				pBlackboard->ChangeData("SelectedPiece", pPiece);
+				pBlackboard->ChangeData("OriginalTile", pTile);
 
 				return BehaviourState::Success;
 			}

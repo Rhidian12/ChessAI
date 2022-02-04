@@ -46,12 +46,14 @@ Chessboard::Chessboard()
 	Transition* pFromNoInputToSelectPiece{ new Transition{ m_pFSM, pNoInputState, pSelectPieceState, &Transitions::HasUserLeftClicked } };
 	Transition* pFromSelectPieceToMovePiece{ new Transition{ m_pFSM, pSelectPieceState, pMovePieceState, &Transitions::HasPieceBeenSelectedAndHasUserLeftClicked } };
 	Transition* pFromMovePieceToNoUserInput{ new Transition{ m_pFSM, pMovePieceState, pNoInputState, &Transitions::WasPieceMoved } };
+	Transition* pFromRightClickToSelectPiece{ new Transition{ m_pFSM, pRightClickState, pSelectPieceState, &Transitions::HasUserLeftClicked } };
 
 	m_pFSM->AddTransition(pFromRightClickToNoUserInput);
 	m_pFSM->AddTransition(pFromNoInputToRightClick);
 	m_pFSM->AddTransition(pFromNoInputToSelectPiece);
 	m_pFSM->AddTransition(pFromSelectPieceToMovePiece);
 	m_pFSM->AddTransition(pFromMovePieceToNoUserInput);
+	m_pFSM->AddTransition(pFromRightClickToSelectPiece);
 
 	InputManager::GetInstance()->AddCommand(
 		GameInput{ MouseButton::LMB },
