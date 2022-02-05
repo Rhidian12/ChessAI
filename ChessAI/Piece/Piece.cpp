@@ -35,6 +35,9 @@ void Piece::Move(TileComponent* const pDestinationTile) noexcept
 	/* Remove the piece from the current tile */
 	Chessboard::GetInstance()->GetTileComponent(m_pOwner->pTransform->GetWorldPosition())->SetPiece(nullptr);
 
+	/* Next up, if there is a piece on the clicked tile, take it */
+	/* [TODO] Implement this */
+
 	/* Set the piece to our destination tile */
 	pDestinationTile->SetPiece(this);
 

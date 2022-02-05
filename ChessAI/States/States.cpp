@@ -146,17 +146,9 @@ namespace States
 			if (isMoveValid != potentialMoves.cend())
 			{
 				/* Move the piece */
+				pSelectedPiece->Move(pClickedTile);
 
-				/* First tell the old tile it no longer has the piece */
-				pBlackboard->GetData<TileComponent*>("OriginalTile")->SetPiece(nullptr);
-
-				/* Next up, if there is a piece on the clicked tile, take it */
-				/* [TODO] Implement this */
-
-				/* Now, move the Selected Piece and set it to a nullptr in the blackboard */
-				pClickedTile->SetPiece(pSelectedPiece);
 				pBlackboard->ChangeData("SelectedPiece", nullptr);
-
 				pBlackboard->ChangeData("WasPieceMoved", true);
 
 				return BehaviourState::Success;
