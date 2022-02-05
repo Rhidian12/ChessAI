@@ -26,23 +26,27 @@ void Piece::Render() const
 	pos.x -= m_pTexture->GetWidth() * 0.5f;
 	pos.y -= m_pTexture->GetHeight() * 0.5f;
 
-	Renderer::GetInstance()->RenderTexture(m_pTexture, PRectf{ pos, m_pTexture->GetWidth(), m_pTexture->GetHeight()}
-	, Rectf{});
+	Renderer::GetInstance()->RenderTexture(
+		m_pTexture,
+		PRectf{ pos, m_pTexture->GetWidth(), m_pTexture->GetHeight() },
+		Rectf{}
+	);
 }
 
 void Piece::Move(TileComponent* const pDestinationTile) noexcept
 {
 	/* Remove the piece from the current tile */
-	Chessboard::GetInstance()->GetTileComponent(m_pOwner->pTransform->GetWorldPosition())->SetPiece(nullptr);
+	m_pTileComponent->SetPiece(nullptr);
 
 	/* Next up, if there is a piece on the clicked tile, take it */
 	/* [TODO] Implement this */
 
 	/* Set the piece to our destination tile */
-	pDestinationTile->SetPiece(this);
+	m_pTileComponent = pDestinationTile;
+	m_pTileComponent->SetPiece(this);
 
 	/* Set this piece's position to the center of the destination tile */
-	m_pOwner->pTransform->SetPosition(pDestinationTile->GetCenterOfTile());
+	m_pOwner->pTransform->SetPosition(m_pTileComponent->GetCenterOfTile());
 }
 
 void Piece::SetColourOfPiece(const PieceColour colour) noexcept
