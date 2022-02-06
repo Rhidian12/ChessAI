@@ -74,5 +74,6 @@ namespace Integrian2D
 		std::vector<Transition*> m_pTransitions;
 
 		FSMState* m_pCurrentState;
+		FSMState* m_pPreviousState;
 	};
 }
