@@ -36,7 +36,7 @@ std::vector<TileComponent*> Queen::GetPossibleMoves() const noexcept
 
 	for (int i{}; i < amountOfIndicesToAdd; ++i)
 	{
-		for (int amountOfTilesTravelled{}; amountOfTilesTravelled < amountOfTilesToCheck; ++amountOfTilesTravelled)
+		for (int amountOfTilesTravelled{ 1 }; amountOfTilesTravelled < amountOfTilesToCheck; ++amountOfTilesTravelled)
 		{
 			nextIndex = currentTileIndex + amountOfTilesTravelled * indicesToAdd[i];
 			if (Integrian2D::Utils::IsInRange(nextIndex, 0, 63))
