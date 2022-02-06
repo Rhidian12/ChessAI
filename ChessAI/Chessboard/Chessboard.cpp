@@ -65,6 +65,11 @@ Chessboard::Chessboard()
 		GameInput{ MouseButton::RMB },
 		new Commands::RightClickChessboardCommand{ SceneManager::GetInstance()->GetScene("ChessScene") },
 		State::OnRelease);
+
+	InputManager::GetInstance()->AddCommand(
+		GameInput{ MouseButton::RMB },
+		new Commands::EscapePressedCommand{ SceneManager::GetInstance()->GetScene("ChessScene") },
+		State::OnRelease);
 }
 
 Chessboard* const Chessboard::GetInstance() noexcept
@@ -172,4 +177,11 @@ void Chessboard::ToggleIsRMBClicked(const std::string& file) noexcept
 	Integrian2D::ASSERT(file.find("Commands.cpp") != std::string::npos, "Chessboard::SetIsRMBClicked() > Only Commands may call this function!");
 
 	m_pBlackboard->ChangeData("HasUserRightClicked", true);
+}
+
+void Chessboard::ToggleIsEscapePressed(const std::string& file) noexcept
+{
+	Integrian2D::ASSERT(file.find("Commands.cpp") != std::string::npos, "Chessboard::ToggleIsEscapePressed() > Only Commands may call this function!");
+
+	m_pBlackboard->ChangeData("WasEscapePressed", true);
 }

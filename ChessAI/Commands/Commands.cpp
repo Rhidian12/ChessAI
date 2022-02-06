@@ -30,4 +30,13 @@ namespace Commands
 	{
 		Chessboard::GetInstance()->ToggleIsRMBClicked(__FILE__);
 	}
+
+	EscapePressedCommand::EscapePressedCommand(Integrian2D::Scene* const pScene)
+		: Command{ pScene }
+	{}
+
+	void EscapePressedCommand::Execute()
+	{
+		Chessboard::GetInstance()->ToggleIsEscapePressed(__FILE__);
+	}
 }

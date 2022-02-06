@@ -19,4 +19,12 @@ namespace Commands
 
 		virtual void Execute() override;
 	};
+
+	class EscapePressedCommand final : public Integrian2D::Command
+	{
+	public:
+		EscapePressedCommand(Integrian2D::Scene* const pScene);
+
+		virtual void Execute() override;
+	};
 }

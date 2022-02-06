@@ -36,6 +36,7 @@ public:
 
 	void ToggleIsLMBClicked(const std::string& file) noexcept;
 	void ToggleIsRMBClicked(const std::string& file) noexcept;
+	void ToggleIsEscapePressed(const std::string& file) noexcept;
 
 private:
 	Chessboard();
