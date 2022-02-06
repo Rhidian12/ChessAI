@@ -70,6 +70,7 @@ namespace States
 
 		std::vector<GameObject*>* pTiles{ pBlackboard->GetData<std::vector<GameObject*>*>("Tiles") };
 		const Point2f& mousePos{ pBlackboard->GetData<Point2f>("LMBMousePosition") };
+		PieceColour* pPieceColour{ pBlackboard->GetData<PieceColour*>("CurrentTurn") };
 
 		const auto it{ std::find_if(pTiles->cbegin(), pTiles->cend(), [&mousePos](const GameObject* const pTile)->bool
 			{
@@ -96,10 +97,16 @@ namespace States
 			/* Does the tile have a piece */
 			if (const Piece* const pPiece{ pTile->GetPiece() }; pPiece != nullptr)
 			{
-				pBlackboard->ChangeData("SelectedPiece", pPiece);
-				pBlackboard->ChangeData("OriginalTile", pTile);
+				/* Is it a piece of the correct colour */
+				if (pPiece->GetColourOfPiece() == *pPieceColour)
+				{
+					pBlackboard->ChangeData("SelectedPiece", pPiece);
+					pBlackboard->ChangeData("OriginalTile", pTile);
 
-				return BehaviourState::Success;
+					return BehaviourState::Success;
+				}
+				else
+					return BehaviourState::Failure;
 			}
 			else
 				return BehaviourState::Failure;
