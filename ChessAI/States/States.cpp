@@ -212,4 +212,16 @@ namespace Transitions
 		else
 			return false;
 	}
+
+	bool WasEscapePressed(Integrian2D::Blackboard* const pBlackboard)
+	{
+		if (pBlackboard->GetData<bool>("WasEscapePressed"))
+		{
+			pBlackboard->ChangeData("WasEscapePressed", false);
+
+			return true;
+		}
+		else
+			return false;
+	}
 }

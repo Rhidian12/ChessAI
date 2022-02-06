@@ -21,33 +21,34 @@ namespace Transitions
 	bool HasUserLeftClicked(Integrian2D::Blackboard* const pBlackboard);
 	bool HasPieceBeenSelectedAndHasUserLeftClicked(Integrian2D::Blackboard* const pBlackboard);
 	bool WasPieceMoved(Integrian2D::Blackboard* const pBlackboard);
+    bool WasEscapePressed(Integrian2D::Blackboard* const pBlackboard);
 }
 
 /*
 
 Chessboard FSM: 
-                                             ┌────────────┐
-                           WasPieceMoved     │            │
-                      ┌──────────────────────┤ MovePiece  │
-                      │                      │            │
-                      │                      └────────────┘
-                      │                              ▲
-                      │                              │
-                      │                              │ HasPieceBeenSelected && HasUserLeftClicked
-                      ▼                              │
-                ┌───────────────┐             ┌──────┴──────┐
-                │               │HasUserLeftCl│             │
-                │  NoUserInput  ├────────────►│ SelectPiece │
-                │               │             │             │
-                └───────┬───────┘             └─────────────┘
-                     ▲  │                                ▲
-                     │  │                                │
-  HasUserRightClicked│  │HasUserRightClicked             │
-                     │  │                                │
-                     │  ▼                                │
-                ┌────┴──────────────────┐                │
-                │                       │                │
-                │  RenderPossibleMoves  ├────────────────┘
-                │                       │ HasUserLeftClicked
-                └───────────────────────┘
+                                                   ┌────────────┐
+                                 WasPieceMoved     │            │
+                            ┌──────────────────────┤ MovePiece  │
+                            │                      │            │
+                            │                      └────────────┘
+                            │                              ▲
+                            │                              │
+                            │                              │ HasPieceBeenSelected && HasUserLeftClicked
+                            ▼                              │
+                      ┌───────────────┐             ┌──────┴──────┐
+                      │               │HasUserLeftCl│             │
+    EscapePressed     │  NoUserInput  ├────────────►│ SelectPiece │
+  ┌──────────────────►│               │             │             │
+  │                   └───────┬───────┘◄────────────┴─────────────┘
+  │                        ▲  │         EscapePressed          ▲
+  │                        │  │                                │
+  │     HasUserRightClicked│  │HasUserRightClicked             │
+  │                        │  │                                │
+  │                        │  ▼                                │
+  │                   ┌────┴──────────────────┐                │
+  │                   │                       │                │
+  │                   │  RenderPossibleMoves  ├────────────────┘
+  └───────────────────┤                       │ HasUserLeftClicked
+                      └───────────────────────┘
 */

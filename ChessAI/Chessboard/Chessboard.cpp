@@ -31,6 +31,7 @@ Chessboard::Chessboard()
 	m_pBlackboard->AddData("SelectedPiece", static_cast<Piece*>(nullptr));
 	m_pBlackboard->AddData("OriginalTile", static_cast<TileComponent*>(nullptr));
 	m_pBlackboard->AddData("WasPieceMoved", false);
+	m_pBlackboard->AddData("WasEscapePressed", false);
 
 	FSMState* pNoInputState{ new FSMState{ m_pFSM, &States::NoUserInput } };
 	FSMState* pRightClickState{ new FSMState{ m_pFSM, &States::UserRightClick } };
