@@ -2,6 +2,8 @@
 
 #include <Math/TypeDefines.h>
 
+#include "../Piece/Piece.h"
+
 #include <vector>
 
 namespace Integrian2D
@@ -33,10 +35,12 @@ public:
 	TileComponent* const GetTileComponent(const Integrian2D::Point2f& pos) const noexcept;
 	TileComponent* const GetTileComponent(const int index) const noexcept;
 	const std::vector<Integrian2D::GameObject*>& GetTiles() const noexcept;
+	PieceColour GetCurrentTurn() const noexcept;
 
 	void ToggleIsLMBClicked(const std::string& file) noexcept;
 	void ToggleIsRMBClicked(const std::string& file) noexcept;
 	void ToggleIsEscapePressed(const std::string& file) noexcept;
+	void EndTurn() noexcept;
 
 private:
 	Chessboard();
@@ -48,4 +52,6 @@ private:
 	Integrian2D::FiniteStateMachine* m_pFSM;
 	
 	std::vector<Integrian2D::GameObject*> m_Tiles{};
+
+	PieceColour m_Turn;
 };

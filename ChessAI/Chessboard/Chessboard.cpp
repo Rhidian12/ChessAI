@@ -11,13 +11,13 @@
 #include <AI/Blackboard/Blackboard.h>
 
 #include "../TileComponent/TileComponent.h"
-#include "../Piece/Piece.h"
 #include "../Commands/Commands.h"
 #include "../States/States.h"
 
 Chessboard::Chessboard()
 	: m_pBlackboard{}
 	, m_pFSM{}
+	, m_Turn{ PieceColour::White }
 {
 	using namespace Integrian2D;
 
@@ -169,6 +169,11 @@ const std::vector<Integrian2D::GameObject*>& Chessboard::GetTiles() const noexce
 	return m_Tiles;
 }
 
+PieceColour Chessboard::GetCurrentTurn() const noexcept
+{
+	return m_Turn;
+}
+
 void Chessboard::ToggleIsLMBClicked(const std::string& file) noexcept
 {
 	Integrian2D::ASSERT(file.find("Commands.cpp") != std::string::npos, "Chessboard::SetIsLMBClicked() > Only Commands may call this function!");
@@ -188,4 +193,9 @@ void Chessboard::ToggleIsEscapePressed(const std::string& file) noexcept
 	Integrian2D::ASSERT(file.find("Commands.cpp") != std::string::npos, "Chessboard::ToggleIsEscapePressed() > Only Commands may call this function!");
 
 	m_pBlackboard->ChangeData("WasEscapePressed", true);
+}
+
+void Chessboard::EndTurn() noexcept
+{
+	m_Turn = !m_Turn;
 }

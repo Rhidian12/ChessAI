@@ -21,11 +21,11 @@ enum class TypeOfPiece
 	King
 };
 
-enum class PieceColour
+enum class PieceColour : int8_t
 {
-	White,
-	Black,
-	None
+	White = 0b0001,
+	Black = ~0b0001,
+	None = 0
 };
 
 /* Other pieces inherit from this class */
