@@ -22,6 +22,7 @@ namespace States
 
 		std::vector<GameObject*>* pTiles{ pBlackboard->GetData<std::vector<GameObject*>*>("Tiles") };
 		const Point2f& mousePos{ pBlackboard->GetData<Point2f>("RMBMousePosition") };
+		PieceColour* pPieceColour{ pBlackboard->GetData<PieceColour*>("CurrentTurn") };
 
 		Renderer* const pRenderer{ Renderer::GetInstance() };
 
@@ -50,13 +51,17 @@ namespace States
 			/* Does the tile have a piece */
 			if (const Piece* const pPiece{ pTile->GetPiece() }; pPiece != nullptr)
 			{
-				auto moves{ pPiece->GetPossibleMoves() };
-				for (const TileComponent* const pPossibleMove : moves)
+				/* Is the piece of the correct colour */
+				if (pPiece->GetColourOfPiece() == *pPieceColour)
 				{
-					/* [TODO] Figure out why Circlef is causing linker issues! */
-					 //pRenderer->RenderFilledCircle(Circlef{pPossibleMove->GetCenterOfTile(), 5.f}); 
-					const Rectf center{ pPossibleMove->GetCenterOfTile().x - 12.5f, pPossibleMove->GetCenterOfTile().y - 12.5f, 25.f, 25.f };
-					pRenderer->RenderFilledRectangle(center);
+					auto moves{ pPiece->GetPossibleMoves() };
+					for (const TileComponent* const pPossibleMove : moves)
+					{
+						/* [TODO] Figure out why Circlef is causing linker issues! */
+						 //pRenderer->RenderFilledCircle(Circlef{pPossibleMove->GetCenterOfTile(), 5.f}); 
+						const Rectf center{ pPossibleMove->GetCenterOfTile().x - 12.5f, pPossibleMove->GetCenterOfTile().y - 12.5f, 25.f, 25.f };
+						pRenderer->RenderFilledRectangle(center);
+					}
 				}
 			}
 		}
