@@ -6,8 +6,17 @@
 #include <Texture/Texture.h>
 #include <Utils/Utils.h>
 
+#include <GameObject/GameObject.h>
+
 #include "../Chessboard/Chessboard.h"
 #include "../TileComponent/TileComponent.h"
+
+#include "Pawn/Pawn.h"
+#include "Bishop/Bishop.h"
+#include "Knight/Knight.h"
+#include "Rook/Rook.h"
+#include "Queen/Queen.h"
+#include "King/King.h"
 
 Piece::Piece(Integrian2D::GameObject* const pOwner, const TypeOfPiece type, Integrian2D::Texture* const pTexture)
 	: Component{ pOwner }
@@ -36,17 +45,43 @@ void Piece::Render() const
 void Piece::Move(TileComponent* const pDestinationTile) noexcept
 {
 	/* Remove the piece from the current tile */
+	std::vector<Component*> pPieces{};
+
+	switch (m_TypeOfPiece)
+	{
+	case TypeOfPiece::Pawn:
+		m_pTileComponent->GetOwner()->RemoveComponentByType<Pawn>(&pPieces);
+		break;
+	case TypeOfPiece::Bishop:
+		m_pTileComponent->GetOwner()->RemoveComponentByType<Bishop>(&pPieces);
+		break;
+	case TypeOfPiece::Knight:
+		m_pTileComponent->GetOwner()->RemoveComponentByType<Knight>(&pPieces);
+		break;
+	case TypeOfPiece::Rook:
+		m_pTileComponent->GetOwner()->RemoveComponentByType<Rook>(&pPieces);
+		break;
+	case TypeOfPiece::Queen:
+		m_pTileComponent->GetOwner()->RemoveComponentByType<Queen>(&pPieces);
+		break;
+	case TypeOfPiece::King:
+		m_pTileComponent->GetOwner()->RemoveComponentByType<King>(&pPieces);
+		break;
+	}
 	m_pTileComponent->SetPiece(nullptr);
 
 	/* Next up, if there is a piece on the clicked tile, take it */
 	/* [TODO] Implement this */
 
-	/* Set the piece to our destination tile */
+	/* Change our tile component to the new tile component */
 	m_pTileComponent = pDestinationTile;
+
+	/* Set the piece to our destination tile */
 	m_pTileComponent->SetPiece(this);
+	m_pTileComponent->GetOwner()->AddComponent(pPieces[0]);
 
 	/* Set this piece's position to the center of the destination tile */
-	m_pOwner->pTransform->SetPosition(m_pTileComponent->GetCenterOfTile());
+	// m_pOwner->pTransform->SetPosition(m_pTileComponent->GetCenterOfTile());
 }
 
 void Piece::SetColourOfPiece(const PieceColour colour) noexcept
