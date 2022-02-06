@@ -47,6 +47,8 @@ void Piece::Move(TileComponent* const pDestinationTile) noexcept
 	/* Remove the piece from the current tile */
 	std::vector<Component*> pPieces{};
 
+	/* Get the piece from the game object */
+	/* [CRINGE] figure out why the fuck i have to ask for the specific class instead of Component */
 	switch (m_TypeOfPiece)
 	{
 	case TypeOfPiece::Pawn:
@@ -79,6 +81,7 @@ void Piece::Move(TileComponent* const pDestinationTile) noexcept
 	/* Set the piece to our destination tile */
 	m_pTileComponent->SetPiece(this);
 	m_pTileComponent->GetOwner()->AddComponent(pPieces[0]);
+	pPieces[0]->SetOwner(m_pTileComponent->GetOwner());
 
 	/* Set this piece's position to the center of the destination tile */
 	// m_pOwner->pTransform->SetPosition(m_pTileComponent->GetCenterOfTile());
