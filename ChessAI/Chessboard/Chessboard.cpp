@@ -71,7 +71,7 @@ Chessboard::Chessboard()
 		State::OnRelease);
 
 	InputManager::GetInstance()->AddCommand(
-		GameInput{ MouseButton::RMB },
+		GameInput{ KeyboardInput::Escape },
 		new Commands::EscapePressedCommand{ SceneManager::GetInstance()->GetScene("ChessScene") },
 		State::OnRelease);
 }
