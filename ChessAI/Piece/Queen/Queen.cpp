@@ -36,11 +36,20 @@ std::vector<TileComponent*> Queen::GetPossibleMoves() const noexcept
 
 	for (int i{}; i < amountOfIndicesToAdd; ++i)
 	{
+		int column{ pChessboard->GetColumnNumber(currentTileIndex) };
 		for (int amountOfTilesTravelled{ 1 }; amountOfTilesTravelled < amountOfTilesToCheck; ++amountOfTilesTravelled)
 		{
 			nextIndex = currentTileIndex + amountOfTilesTravelled * indicesToAdd[i];
 			if (Integrian2D::Utils::IsInRange(nextIndex, 0, 63))
 			{
+				/* make sure we're not wrapping around the chessboard */
+				int sign{ 1 };
+				if (indicesToAdd[i] < 0)
+					sign = -1;
+
+				if (pChessboard->GetColumnNumber(nextIndex) + (amountOfTilesTravelled * sign) != column)
+					break;
+
 				/* check horizontal movement if we're moving horizontally */
 				if (indicesToAdd[i] == 1 || indicesToAdd[i] == -1)
 				{

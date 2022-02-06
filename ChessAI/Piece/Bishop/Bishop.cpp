@@ -34,11 +34,20 @@ std::vector<TileComponent*> Bishop::GetPossibleMoves() const noexcept
 
 	for (int i{}; i < amountOfIndicesToAdd; ++i)
 	{
+		int column{ pChessboard->GetColumnNumber(currentTileIndex) };
 		for (int amountOfTilesTravelled{ 1 }; amountOfTilesTravelled < amountOfTilesToCheck; ++amountOfTilesTravelled)
 		{
 			nextIndex = currentTileIndex + amountOfTilesTravelled * indicesToAdd[i];
 			if (Integrian2D::Utils::IsInRange(nextIndex, 0, 63))
 			{
+				/* make sure we're not wrapping around the chessboard */
+				int sign{ 1 };
+				if (indicesToAdd[i] < 0)
+					sign = -1;
+
+				if (pChessboard->GetColumnNumber(nextIndex) + (amountOfTilesTravelled * sign) != column)
+					break;
+
 				/* Diagonal movement gets checked regardless in the Range check */
 
 				pTileComponent = pChessboard->GetTileComponent(nextIndex);
