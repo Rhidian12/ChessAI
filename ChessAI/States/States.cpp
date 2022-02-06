@@ -40,7 +40,7 @@ namespace States
 			}) };
 
 		if (it == pTiles->cend())
-			return BehaviourState::Running;
+			return BehaviourState::Failure;
 
 		const TileComponent* const pTile{ (*it)->GetComponentByType<TileComponent>() };
 
@@ -86,7 +86,7 @@ namespace States
 			}) };
 
 		if (it == pTiles->cend())
-			return BehaviourState::Running;
+			return BehaviourState::Failure;
 
 		const TileComponent* const pTile{ (*it)->GetComponentByType<TileComponent>() };
 
@@ -102,10 +102,10 @@ namespace States
 				return BehaviourState::Success;
 			}
 			else
-				return BehaviourState::Running;
+				return BehaviourState::Failure;
 		}
 
-		return BehaviourState::Running;
+		return BehaviourState::Failure;
 	}
 
 	Integrian2D::BehaviourState MovePiece(Integrian2D::Blackboard* const pBlackboard)
@@ -131,7 +131,7 @@ namespace States
 			}) };
 
 		if (it == pTiles->cend())
-			return BehaviourState::Running;
+			return BehaviourState::Failure;
 
 		TileComponent* const pClickedTile{ (*it)->GetComponentByType<TileComponent>() };
 
@@ -156,11 +156,11 @@ namespace States
 			else
 			{
 				/* The move is invalid */
-				return BehaviourState::Running;
+				return BehaviourState::Failure;
 			}
 		}
 
-		return BehaviourState::Running;
+		return BehaviourState::Failure;
 	}
 }
 
