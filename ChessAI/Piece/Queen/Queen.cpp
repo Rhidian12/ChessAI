@@ -42,14 +42,6 @@ std::vector<TileComponent*> Queen::GetPossibleMoves() const noexcept
 			nextIndex = currentTileIndex + amountOfTilesTravelled * indicesToAdd[i];
 			if (Integrian2D::Utils::IsInRange(nextIndex, 0, 63))
 			{
-				/* make sure we're not wrapping around the chessboard */
-				int sign{ 1 };
-				if (indicesToAdd[i] < 0)
-					sign = -1;
-
-				if (pChessboard->GetColumnNumber(nextIndex) + (amountOfTilesTravelled * sign) != column)
-					break;
-
 				/* check horizontal movement if we're moving horizontally */
 				if (indicesToAdd[i] == 1 || indicesToAdd[i] == -1)
 				{
@@ -62,7 +54,16 @@ std::vector<TileComponent*> Queen::GetPossibleMoves() const noexcept
 					if (pChessboard->GetColumnNumber(nextIndex) != pChessboard->GetColumnNumber(currentTileIndex))
 						continue;
 				}
-				/* Diagonal movement gets checked regardless in the Range check */
+				else /* handle diagonal movement */
+				{
+					/* make sure we're not wrapping around the chessboard */
+					int sign{ 1 };
+					if (indicesToAdd[i] == 9 || indicesToAdd[i] == -7)
+						sign = -1;
+
+					if (pChessboard->GetColumnNumber(nextIndex) + (amountOfTilesTravelled * sign) != column)
+						break;
+				}
 
 				pTileComponent = pChessboard->GetTileComponent(nextIndex);
 

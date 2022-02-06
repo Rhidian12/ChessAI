@@ -42,7 +42,7 @@ std::vector<TileComponent*> Bishop::GetPossibleMoves() const noexcept
 			{
 				/* make sure we're not wrapping around the chessboard */
 				int sign{ 1 };
-				if (indicesToAdd[i] < 0)
+				if (indicesToAdd[i] == 9 || indicesToAdd[i] == -7)
 					sign = -1;
 
 				if (pChessboard->GetColumnNumber(nextIndex) + (amountOfTilesTravelled * sign) != column)
