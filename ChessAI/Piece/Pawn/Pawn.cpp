@@ -5,6 +5,7 @@
 
 #include <GameObject/GameObject.h>
 #include <Components/TransformComponent/TransformComponent.h>
+#include <Utils/Utils.h>
 
 Pawn::Pawn(Integrian2D::GameObject* const pOwner, Integrian2D::Texture* const pTexture)
 	: Piece{ pOwner, TypeOfPiece::Pawn, pTexture }
@@ -38,8 +39,12 @@ std::vector<TileComponent*> Pawn::GetPossibleMoves() const noexcept
 	/* First check the tile in front of the pawn */
 
 	int sign{ m_PieceColour == PieceColour::White ? 1 : -1 };
+	constexpr int rowMovement{ 8 };
 
-	TileComponent* const pFirstTile{ pChessboard->GetTileComponent(currentTileIndex + (8 * sign)) };
+	constexpr int amountOfTilesToCheck{ 2 };
+	constexpr int possibleAttackMoves[amountOfTilesToCheck]{ -1, 1 };
+
+	TileComponent* const pFirstTile{ pChessboard->GetTileComponent(currentTileIndex + (rowMovement * sign)) };
 
 	/* If there is no piece on the tile, we can move on it */
 	if (!pFirstTile->GetPiece() || pFirstTile->GetPiece()->GetColourOfPiece() != m_PieceColour)
@@ -49,14 +54,34 @@ std::vector<TileComponent*> Pawn::GetPossibleMoves() const noexcept
 		/* If we haven't moved the pawn yet, check if we can move another tile */
 		if (!m_HasMoved)
 		{
-			TileComponent* const pSecondTile{ pChessboard->GetTileComponent(currentTileIndex + (16 * sign)) };
+			TileComponent* const pSecondTile{ pChessboard->GetTileComponent(currentTileIndex + (rowMovement * 2 * sign)) };
 
 			if (!pSecondTile->GetPiece() || pSecondTile->GetPiece()->GetColourOfPiece() != m_PieceColour)
 				possibleMoves.push_back(pSecondTile);
 		}
 	}
 
-	/* [TODO] Should still check to take other pieces + en passant */
+	/* Check if we can take pieces */
+	for (int i{}; i < amountOfTilesToCheck; ++i)
+	{
+		const int nextIndex{ currentTileIndex + (rowMovement * sign + possibleAttackMoves[i]) };
+
+		/* safety check */
+		if (Integrian2D::Utils::IsInRange(nextIndex, 0, 63))
+		{
+			TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
+
+			/* safety check */
+			if (pTile)
+				/* if the tile has a piece */
+				if (Piece* const pPiece{ pTile->GetPiece() }; pPiece != nullptr)
+					/* if the piece does not have the same colour of our piece */
+					if (pPiece->GetColourOfPiece() != m_PieceColour)
+						possibleMoves.push_back(pTile);
+		}
+	}
+
+	/* [TODO] Should still check en passant */
 
 	return possibleMoves;
 }
