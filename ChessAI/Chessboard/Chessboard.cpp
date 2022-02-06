@@ -32,6 +32,7 @@ Chessboard::Chessboard()
 	m_pBlackboard->AddData("OriginalTile", static_cast<TileComponent*>(nullptr));
 	m_pBlackboard->AddData("WasPieceMoved", false);
 	m_pBlackboard->AddData("WasEscapePressed", false);
+	m_pBlackboard->AddData("CurrentTurn", &m_Turn);
 
 	FSMState* pNoInputState{ new FSMState{ m_pFSM, &States::NoUserInput } };
 	FSMState* pRightClickState{ new FSMState{ m_pFSM, &States::UserRightClick } };
@@ -197,5 +198,5 @@ void Chessboard::ToggleIsEscapePressed(const std::string& file) noexcept
 
 void Chessboard::EndTurn() noexcept
 {
-	m_Turn = !m_Turn;
+	m_Turn = static_cast<PieceColour>(~static_cast<std::underlying_type_t<PieceColour>>(m_Turn));
 }
