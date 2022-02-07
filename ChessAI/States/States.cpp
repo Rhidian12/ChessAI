@@ -12,6 +12,8 @@
 #include "../Chessboard/Chessboard.h"
 #include "../Piece/Pawn/Pawn.h"
 
+#include <algorithm>
+
 namespace HelperFunctions
 {
 	void TakePiece(TileComponent* const pClickedTile, Piece* const pSelectedPiece)
@@ -84,6 +86,65 @@ namespace HelperFunctions
 				}
 			}
 		}
+	}
+
+	bool IsMoveResultingInCheck(Integrian2D::Blackboard* const pBlackboard, Piece* const pSelectedPiece)
+	{
+		using namespace Integrian2D;
+
+		const PieceColour currentColour{ *pBlackboard->GetData<PieceColour*>("CurrentTurn") };
+		const std::vector<Piece*>* pPieces{ pBlackboard->GetData<std::vector<Piece*>*>("Pieces") };
+		const std::vector<GameObject*>* pTiles{ pBlackboard->GetData<std::vector<GameObject*>*>("Tiles") };
+
+		const TileComponent* const pKingTile{ (*std::find_if(pTiles->cbegin(), pTiles->cend(),
+			[currentColour](const GameObject* const pTile)->bool
+			{
+				const Piece* const pPiece{ pTile->GetComponentByType<TileComponent>()->GetPiece() };
+				if (pPiece)
+					return pPiece->GetTypeOfPiece() == TypeOfPiece::King && pPiece->GetColourOfPiece() == currentColour;
+				else
+					return false;
+			}))->GetComponentByType<TileComponent>() };
+
+		const Piece* const pKing{ pKingTile->GetPiece() };
+
+		for (Piece* const pEnemyPiece : *pPieces)
+		{
+			/* we need to check the other pieces to see if we move that we're not going in check */
+			if (pEnemyPiece->GetColourOfPiece() != currentColour)
+			{
+				const std::vector<TileComponent*> possibleMoves{ pEnemyPiece->GetPossibleMoves() };
+
+				/* is the king is POSSIBLY being threatened */
+				if (std::find(possibleMoves.cbegin(), possibleMoves.cend(), pKingTile) != possibleMoves.cend())
+				{
+					/* is our piece defending the king */
+					if (std::find_if(possibleMoves.cbegin(), possibleMoves.cend(),
+						[pSelectedPiece](const TileComponent* const pTile)->bool
+						{
+							return pTile->GetPiece() == pSelectedPiece;
+						}) != possibleMoves.cend())
+					{
+						/* is it only our piece? */
+						for (const TileComponent* const pTile : possibleMoves)
+						{
+							/* is there a piece? */
+							if (Piece* const pPiece{ pTile->GetPiece() }; pPiece != nullptr)
+							{
+								/* ignore our king and selected piece */
+								if (pPiece != pKing && pPiece != pSelectedPiece)
+									return false;
+							}
+						}
+
+						/* if we didn't return false by now, it means there were no other pieces, and it would result in check */
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 }
 
@@ -235,10 +296,30 @@ namespace States
 
 			if (isMoveValid != potentialMoves.cend())
 			{
+				/* cache our original tile */
+				TileComponent* const pOriginalTile{ pSelectedPiece->GetOwner()->GetComponentByType<TileComponent>() };
+
+				/* do a GHOST move, we already move the piece, but this will be nullified */
+				pSelectedPiece->Move(pClickedTile);
+
+				/* Check if our move would result in a check, ergo is the move valid */
+				const bool wouldMoveResultInCheck{ HelperFunctions::IsMoveResultingInCheck(pBlackboard, pSelectedPiece) };
+
+				/* undo the GHOST move */
+				pSelectedPiece->Move(pOriginalTile);
+
+				/* if the move would result in check, stop moving */
+				if (wouldMoveResultInCheck)
+				{
+					pBlackboard->ChangeData("SelectedPiece", nullptr);
+
+					return BehaviourState::Failure;
+				}
+
 				/* Take a piece if possible */
 				HelperFunctions::TakePiece(pClickedTile, pSelectedPiece);
 
-				/* Move the piece */
+				/* ACTUALLY Move the piece */
 				pSelectedPiece->Move(pClickedTile);
 
 				pBlackboard->ChangeData("SelectedPiece", nullptr);

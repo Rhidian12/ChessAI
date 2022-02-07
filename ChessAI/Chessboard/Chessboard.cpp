@@ -41,6 +41,7 @@ Chessboard::Chessboard()
 	m_pBlackboard->AddData("WasPieceMoved", false);
 	m_pBlackboard->AddData("WasEscapePressed", false);
 	m_pBlackboard->AddData("CurrentTurn", &m_Turn);
+	m_pBlackboard->AddData("Pieces", &m_Pieces);
 
 	FSMState* pNoInputState{ new FSMState{ m_pFSM, &States::NoUserInput } };
 	FSMState* pRightClickState{ new FSMState{ m_pFSM, &States::UserRightClick } };
