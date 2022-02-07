@@ -20,7 +20,7 @@ namespace Integrian2D
 		template<typename Type>
 		void QueueEvent(const std::string& eventName, const Type& data, const int delay = 0) noexcept
 		{
-			m_Events.emplace_back(Event{ EventImplementation{ eventName, data }, delay });
+			m_Events.emplace_back(Event{ EventImplementation{ eventName.c_str(), data}, delay});
 		}
 
 		/* This function gets called interally and should NOT get called manually

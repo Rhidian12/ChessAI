@@ -32,10 +32,10 @@ namespace Integrian2D
 	class INTEGRIAN2D_API EventImplementation final
 	{
 	public:
-		EventImplementation(const std::string& eventName);
+		EventImplementation(const char* eventName);
 
 		template<typename Type>
-		EventImplementation(const std::string& eventName, const Type& data);
+		EventImplementation(const char* eventName, const Type& data);
 
 		const char* GetEvent() const noexcept;
 
@@ -48,8 +48,8 @@ namespace Integrian2D
 	};
 
 	template<typename Type>
-	EventImplementation::EventImplementation(const std::string& eventName, const Type& data)
-		: m_Event{ eventName.c_str() }
+	EventImplementation::EventImplementation(const char* eventName, const Type& data)
+		: m_Event{ eventName }
 		, m_pData{ new EventData{ data } }
 	{}
 
