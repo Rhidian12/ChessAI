@@ -13,6 +13,9 @@ public:
 
 	virtual std::vector<TileComponent*> GetPossibleMoves() const noexcept override;
 
+	bool GetMovedDoubleLastTurn() const noexcept;
+
 private:
 	bool m_HasMoved;
+	bool m_HasJustMoved;
 };

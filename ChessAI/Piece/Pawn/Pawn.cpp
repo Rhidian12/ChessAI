@@ -10,6 +10,7 @@
 Pawn::Pawn(Integrian2D::GameObject* const pOwner, Integrian2D::Texture* const pTexture)
 	: Piece{ pOwner, TypeOfPiece::Pawn, pTexture }
 	, m_HasMoved{}
+	, m_HasJustMoved{}
 {
 }
 
@@ -17,6 +18,7 @@ Integrian2D::Component* Pawn::Clone(Integrian2D::GameObject* pOwner) noexcept
 {
 	Pawn* pPawn{ new Pawn{ pOwner, m_pTexture } };
 	pPawn->m_HasMoved = m_HasMoved;
+	pPawn->m_HasJustMoved = m_HasJustMoved;
 
 	return pPawn;
 }
@@ -25,7 +27,17 @@ void Pawn::Move(TileComponent* const pDestinationTile) noexcept
 {
 	Piece::Move(pDestinationTile);
 
-	m_HasMoved = true;
+	/* the first time the pawn gets moved, this does not get set to true yet 
+		the second time the pawn moves, the boolean will get set to false again */
+	if (m_HasJustMoved)
+		m_HasJustMoved = false;
+
+	/* once the pawn has moved once, set these booleans to true */
+	if (!m_HasMoved)
+	{
+		m_HasMoved = true;
+		m_HasJustMoved = true;
+	}
 }
 
 std::vector<TileComponent*> Pawn::GetPossibleMoves() const noexcept
@@ -84,4 +96,9 @@ std::vector<TileComponent*> Pawn::GetPossibleMoves() const noexcept
 	/* [TODO] Should still check en passant */
 
 	return possibleMoves;
+}
+
+bool Pawn::GetMovedDoubleLastTurn() const noexcept
+{
+	return m_HasJustMoved;
 }
