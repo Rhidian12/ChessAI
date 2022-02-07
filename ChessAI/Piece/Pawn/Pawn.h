@@ -13,9 +13,11 @@ public:
 
 	virtual std::vector<TileComponent*> GetPossibleMoves() const noexcept override;
 
+	void SetMovedDouble() noexcept;
+
 	bool GetMovedDoubleLastTurn() const noexcept;
 
 private:
 	bool m_HasMoved;
-	bool m_HasJustMoved;
+	bool m_MovedDouble;
 };
