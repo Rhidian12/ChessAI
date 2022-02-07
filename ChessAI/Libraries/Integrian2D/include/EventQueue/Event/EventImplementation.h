@@ -1,11 +1,12 @@
 #pragma once
 
+#include "../../Integrian2D_API.h"
+
 #include <string>
-#include <memory>
 
 namespace Integrian2D
 {
-	class IEventData
+	class INTEGRIAN2D_API IEventData
 	{
 	public:
 		virtual ~IEventData() = default;
@@ -28,30 +29,33 @@ namespace Integrian2D
 		Type m_Data;
 	};
 
-	class EventImplementation final
+	class INTEGRIAN2D_API EventImplementation final
 	{
 	public:
-		EventImplementation(const std::string& eventName)
-			: m_Event{ eventName }
-			, m_pData{}
-		{}
+		EventImplementation(const std::string& eventName);
 
 		template<typename Type>
-		EventImplementation(const std::string& eventName, const Type& data)
-			: m_Event{ eventName }
-			, m_pData{ new EventData<Type>{data} }
-		{}
+		EventImplementation(const std::string& eventName, const Type& data);
 
-		const std::string& GetEvent() const noexcept;
+		const char* GetEvent() const noexcept;
 
 		template<typename Type>
-		const Type& GetData() const noexcept
-		{
-			return std::static_pointer_cast<EventData<Type>>(m_pData)->GetData();
-		}
+		const Type& GetData() const noexcept;
 
 	private:
-		std::string m_Event;
-		std::shared_ptr<IEventData> m_pData;
+		const char* m_Event;
+		IEventData* m_pData;
 	};
+
+	template<typename Type>
+	EventImplementation::EventImplementation(const std::string& eventName, const Type& data)
+		: m_Event{ eventName.c_str() }
+		, m_pData{ new EventData{ data } }
+	{}
+
+	template<typename Type>
+	const Type& EventImplementation::GetData() const noexcept
+	{
+		return static_cast<EventData<Type>*>(m_pData)->GetData();
+	}
 }

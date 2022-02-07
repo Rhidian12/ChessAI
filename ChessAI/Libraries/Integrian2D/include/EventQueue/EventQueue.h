@@ -3,6 +3,9 @@
 #include "../Integrian2D_API.h"
 #include "Event/Event.h"
 
+#include <vector>
+#include <deque>
+
 namespace Integrian2D
 {
 	class IListener;
@@ -10,15 +13,17 @@ namespace Integrian2D
 	class EventQueue final
 	{
 	public:
-		static EventQueue* const GetInstance() noexcept;
+		INTEGRIAN2D_API static EventQueue* const GetInstance() noexcept;
 		static void Cleanup() noexcept;
 
-		INTEGRIAN2D_API ~EventQueue();
-
 		/* Queue an event to the EventQueue, this EventQueue operates on a principle of FIFO (First In, First Out) */
-		INTEGRIAN2D_API void QueueEvent(const Event& event) noexcept;
+		template<typename Type>
+		void QueueEvent(const std::string& eventName, const Type& data, const int delay = 0) noexcept
+		{
+			m_Events.emplace_back(Event{ EventImplementation{ eventName, data }, delay });
+		}
 
-		/* This function gets called interally and should NOT get called manually 
+		/* This function gets called interally and should NOT get called manually
 		   All events that were added before Update() gets called get executed, or their timer gets increased by 1
 		   See Event for documentation regarding the event timer */
 		void Update() noexcept;
@@ -35,11 +40,10 @@ namespace Integrian2D
 	private:
 		friend class Scene;
 
-		class EventQueueImpl;
-
 		EventQueue();
 
 		inline static EventQueue* m_pInstance{};
-		EventQueueImpl* m_pEventQueueImpl;
+		std::vector<IListener*> m_pListeners;
+		std::deque<Event> m_Events;
 	};
 }

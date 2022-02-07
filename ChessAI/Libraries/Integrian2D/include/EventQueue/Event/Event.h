@@ -9,7 +9,7 @@ namespace Integrian2D
 	   An Event has an identifier - which is required - optional data and an optional delay 
 	   The delay is set to 0 by default 
 	   The delay is used to indicate by how many frames an event should get delayed before it gets broadcasted by the EventQueue */
-	struct Event final
+	struct INTEGRIAN2D_API Event final
 	{
 		/* Create an Event 
 		   The EventImplementation constructor looks like this: 
@@ -20,7 +20,7 @@ namespace Integrian2D
 
 			template<typename Type>
 			EventImplementation(const std::string& eventName, const Type& data); */
-		INTEGRIAN2D_API Event(const EventImplementation& _event, const int _delay = 0);
+		Event(const EventImplementation& _event, const int _delay = 0);
 
 		/* The Event, from which you can call GetEvent() - which is the identifier -
 		   and GetData() which is the optionally provided data */
