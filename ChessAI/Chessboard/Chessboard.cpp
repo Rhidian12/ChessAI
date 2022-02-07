@@ -124,22 +124,22 @@ bool Chessboard::OnEvent(const Integrian2D::Event& event)
 			switch (pPieceToBeDeleted->GetTypeOfPiece())
 			{
 			case TypeOfPiece::Pawn:
-				(*tileIt)->DeleteComponentByType<Pawn>();
+				(*tileIt)->DeleteComponentByValue(pPieceToBeDeleted);
 				break;
 			case TypeOfPiece::Bishop:
-				(*tileIt)->DeleteComponentByType<Bishop>();
+				(*tileIt)->DeleteComponentByValue(pPieceToBeDeleted);
 				break;
 			case TypeOfPiece::Knight:
-				(*tileIt)->DeleteComponentByType<Knight>();
+				(*tileIt)->DeleteComponentByValue(pPieceToBeDeleted);
 				break;
 			case TypeOfPiece::Rook:
-				(*tileIt)->DeleteComponentByType<Rook>();
+				(*tileIt)->DeleteComponentByValue(pPieceToBeDeleted);
 				break;
 			case TypeOfPiece::Queen:
-				(*tileIt)->DeleteComponentByType<Queen>();
+				(*tileIt)->DeleteComponentByValue(pPieceToBeDeleted);
 				break;
 			case TypeOfPiece::King:
-				(*tileIt)->DeleteComponentByType<King>();
+				(*tileIt)->DeleteComponentByValue(pPieceToBeDeleted);
 				break;
 			}
 		}

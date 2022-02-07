@@ -45,6 +45,10 @@ namespace Integrian2D
 		template<typename Type, typename = std::enable_if_t<std::is_base_of_v<Component, Type>>>
 		Type* const GetComponentByType() const noexcept;
 
+		/* This function returns all of the Components requested by the user */
+		template<typename Type, typename = std::enable_if_t<std::is_base_of_v<Component, Type>>>
+		std::vector<Type*> GetAllComponentsByType() const noexcept;
+
 		/* Adds a Component to the GameObject, if it not already present
 		   Duplicate Component Types are allowed, but not the same Component twice */
 		INTEGRIAN2D_API void AddComponent(Component* const pComponent) noexcept;
@@ -53,12 +57,20 @@ namespace Integrian2D
 			This function will remove ALL Components of the provided type
 			This function does NOT destroy Components! */
 		template<typename Type, typename = std::enable_if_t<std::is_base_of_v<Component, Type>>>
-		void RemoveComponentByType(std::vector<Component*>* pComponents) noexcept;
+		void RemoveAllComponentsByType(std::vector<Component*>* pComponents) noexcept;
+
+		/* Removes a component from the GameObject
+			This function will remove the specific component
+			This function does NOT destroy Components! */
+		INTEGRIAN2D_API void RemoveComponentByValue(Component* const pComponent) noexcept;
 
 		/* Removes AND deletes a component from the GameObject 
 			This function will delete ALL Components of the provided type */
 		template<typename Type, typename = std::enable_if_t<std::is_base_of_v<Component, Type>>>
-		void DeleteComponentByType() noexcept;
+		void DeleteAllComponentsByType() noexcept;
+
+		/* Removes AND deletes a component from the GameObject */
+		INTEGRIAN2D_API void DeleteComponentByValue(Component* const pComponent) noexcept;
 
 		/* Sets another GameObject as this GameObject's Child
 		   The GameObject set as Child its parent is set as this GameObject */
@@ -115,7 +127,20 @@ namespace Integrian2D
 	}
 
 	template<typename Type, typename>
-	void GameObject::RemoveComponentByType(std::vector<Component*>* pComponents) noexcept
+	std::vector<Type*> GameObject::GetAllComponentsByType() const noexcept
+	{
+		std::vector<Type*> components{};
+		const std::type_info& typeInfo{ typeid(Type) };
+
+		for (Component* pC : m_pComponents)
+			if (typeid(*pC) == typeInfo)
+				components.push_back(static_cast<Type*>(pC));
+
+		return components;
+	}
+
+	template<typename Type, typename>
+	void GameObject::RemoveAllComponentsByType(std::vector<Component*>* pComponents) noexcept
 	{
 		const std::type_info& typeInfo{ typeid(Type) };
 
@@ -142,7 +167,7 @@ namespace Integrian2D
 	}
 
 	template<typename Type, typename>
-	void GameObject::DeleteComponentByType() noexcept
+	void GameObject::DeleteAllComponentsByType() noexcept
 	{
 		const std::type_info& typeInfo{ typeid(Type) };
 

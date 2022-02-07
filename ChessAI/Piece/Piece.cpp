@@ -52,22 +52,22 @@ void Piece::Move(TileComponent* const pDestinationTile) noexcept
 	switch (m_TypeOfPiece)
 	{
 	case TypeOfPiece::Pawn:
-		m_pTileComponent->GetOwner()->RemoveComponentByType<Pawn>(&pPieces);
+		m_pTileComponent->GetOwner()->RemoveAllComponentsByType<Pawn>(&pPieces);
 		break;
 	case TypeOfPiece::Bishop:
-		m_pTileComponent->GetOwner()->RemoveComponentByType<Bishop>(&pPieces);
+		m_pTileComponent->GetOwner()->RemoveAllComponentsByType<Bishop>(&pPieces);
 		break;
 	case TypeOfPiece::Knight:
-		m_pTileComponent->GetOwner()->RemoveComponentByType<Knight>(&pPieces);
+		m_pTileComponent->GetOwner()->RemoveAllComponentsByType<Knight>(&pPieces);
 		break;
 	case TypeOfPiece::Rook:
-		m_pTileComponent->GetOwner()->RemoveComponentByType<Rook>(&pPieces);
+		m_pTileComponent->GetOwner()->RemoveAllComponentsByType<Rook>(&pPieces);
 		break;
 	case TypeOfPiece::Queen:
-		m_pTileComponent->GetOwner()->RemoveComponentByType<Queen>(&pPieces);
+		m_pTileComponent->GetOwner()->RemoveAllComponentsByType<Queen>(&pPieces);
 		break;
 	case TypeOfPiece::King:
-		m_pTileComponent->GetOwner()->RemoveComponentByType<King>(&pPieces);
+		m_pTileComponent->GetOwner()->RemoveAllComponentsByType<King>(&pPieces);
 		break;
 	}
 	m_pTileComponent->SetPiece(nullptr);
