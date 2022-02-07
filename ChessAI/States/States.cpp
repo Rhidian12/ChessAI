@@ -12,6 +12,81 @@
 #include "../Chessboard/Chessboard.h"
 #include "../Piece/Pawn/Pawn.h"
 
+namespace HelperFunctions
+{
+	void TakePiece(TileComponent* const pClickedTile, Piece* const pSelectedPiece)
+	{
+		using namespace Integrian2D;
+
+		/* Safety check */
+		if (pClickedTile)
+		{
+			/* Check if the clicked tile is present in the selected piece's potential moves */
+			const std::vector<TileComponent*> potentialMoves{ pSelectedPiece->GetPossibleMoves() };
+
+			auto isMoveValid{ std::find(potentialMoves.cbegin(), potentialMoves.cend(), pClickedTile) };
+
+			if (isMoveValid != potentialMoves.cend())
+			{
+				Chessboard* const pChessboard{ Chessboard::GetInstance() };
+
+				/* cache this in case it's a pawn */
+				const int originalTileIndex{ pChessboard->GetTileIndex(pSelectedPiece->GetOwner()->GetComponentByType<TileComponent>()) };
+
+				switch (pSelectedPiece->GetTypeOfPiece())
+				{
+				case TypeOfPiece::Pawn:
+					/* if the piece is a pawn, check for a normal attack, en passant or whether we moved twice */
+				{
+					const int clickedTileIndex{ pChessboard->GetTileIndex(pClickedTile) };
+					const int sign{ pSelectedPiece->GetColourOfPiece() == PieceColour::White ? 1 : -1 };
+					constexpr int rowMovement{ 8 };
+
+					/* first check for a normal attack */
+					if (Piece* const _pPiece{ pClickedTile->GetPiece() }; _pPiece != nullptr)
+					{
+						EventQueue::GetInstance()->QueueEvent("DeletePiece", _pPiece);
+					}
+					/* secondly check if we just moved twice */
+					else if (abs(clickedTileIndex - originalTileIndex) == (rowMovement * 2))
+					{
+						static_cast<Pawn*>(pSelectedPiece)->SetMovedDouble(true);
+					}
+					/* else check if the move we're doing is en passant */
+					else
+					{
+						/* get the tile behind our pawn */
+						TileComponent* const pTileBehindPawn{ pChessboard->GetTileComponent(clickedTileIndex + (rowMovement * (-sign))) };
+
+						if (Piece* const pPiece{ pTileBehindPawn->GetPiece() }; pPiece != nullptr)
+						{
+							/* is the piece behind our pawn is a pawn as well */
+							if (pPiece->GetTypeOfPiece() == TypeOfPiece::Pawn)
+							{
+								/* check if it just moved double */
+								if (static_cast<Pawn*>(pPiece)->GetMovedDoubleLastTurn())
+								{
+									EventQueue::GetInstance()->QueueEvent("DeletePiece", pPiece);
+								}
+							}
+						}
+					}
+				}
+				break;
+				case TypeOfPiece::Bishop:
+				case TypeOfPiece::Knight:
+				case TypeOfPiece::Rook:
+				case TypeOfPiece::Queen:
+				case TypeOfPiece::King:
+					if (Piece* const pPiece{ pClickedTile->GetPiece() }; pPiece != nullptr)
+						EventQueue::GetInstance()->QueueEvent("DeletePiece", pPiece);
+					break;
+				}
+			}
+		}
+	}
+}
+
 namespace States
 {
 	Integrian2D::BehaviourState NoUserInput(Integrian2D::Blackboard* const)
@@ -160,46 +235,11 @@ namespace States
 
 			if (isMoveValid != potentialMoves.cend())
 			{
-				Chessboard* const pChessboard{ Chessboard::GetInstance() };
-
-				/* cache this in case it's a pawn */
-				const int originalTileIndex{ pChessboard->GetTileIndex(pSelectedPiece->GetOwner()->GetComponentByType<TileComponent>()) };
+				/* Take a piece if possible */
+				HelperFunctions::TakePiece(pClickedTile, pSelectedPiece);
 
 				/* Move the piece */
 				pSelectedPiece->Move(pClickedTile);
-
-				/* if the piece is a pawn, check for en passant or whether we moved twice */
-				if (pSelectedPiece->GetTypeOfPiece() == TypeOfPiece::Pawn)
-				{
-					const int clickedTileIndex{ pChessboard->GetTileIndex(pClickedTile) };
-					const int sign{ pSelectedPiece->GetColourOfPiece() == PieceColour::White ? 1 : -1 };
-					constexpr int rowMovement{ 8 };
-
-					/* first check if we just moved twice */
-					if (abs(clickedTileIndex - originalTileIndex) == (rowMovement * 2))
-					{
-						static_cast<Pawn*>(pSelectedPiece)->SetMovedDouble(true);
-					}
-					/* else check if the move we're doing is en passant */
-					else
-					{
-						/* get the tile behind our pawn */
-						TileComponent* const pTileBehindPawn{ pChessboard->GetTileComponent(clickedTileIndex + (rowMovement * (-sign))) };
-
-						if (Piece* const pPiece{ pTileBehindPawn->GetPiece() }; pPiece != nullptr)
-						{
-							/* is the piece behind our pawn is a pawn as well */
-							if (pPiece->GetTypeOfPiece() == TypeOfPiece::Pawn)
-							{
-								/* check if it just moved double */
-								if (static_cast<Pawn*>(pPiece)->GetMovedDoubleLastTurn())
-								{
-									EventQueue::GetInstance()->QueueEvent("DeletePiece", pPiece);
-								}
-							}
-						}
-					}
-				}
 
 				pBlackboard->ChangeData("SelectedPiece", nullptr);
 				pBlackboard->ChangeData("WasPieceMoved", true);
