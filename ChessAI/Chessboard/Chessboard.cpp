@@ -105,6 +105,11 @@ void Chessboard::HandleInput() noexcept
 void Chessboard::SetTiles(const std::vector<Integrian2D::GameObject*>& tiles) noexcept
 {
 	m_Tiles = tiles;
+
+	for (Integrian2D::GameObject* const pG : m_Tiles)
+		for (Integrian2D::Component* pC : pG->GetComponents())
+			if (dynamic_cast<Piece*>(pC))
+				m_Pieces.push_back(static_cast<Piece*>(pC));
 }
 
 int Chessboard::GetTileIndex(const Integrian2D::GameObject* const pTile) const noexcept
@@ -199,4 +204,9 @@ void Chessboard::ToggleIsEscapePressed(const std::string& file) noexcept
 void Chessboard::EndTurn() noexcept
 {
 	m_Turn = static_cast<PieceColour>(~static_cast<std::underlying_type_t<PieceColour>>(m_Turn));
+
+	for (Piece* pPiece : m_Pieces)
+	{
+
+	}
 }

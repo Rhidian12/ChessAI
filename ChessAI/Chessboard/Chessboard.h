@@ -52,6 +52,7 @@ private:
 	Integrian2D::FiniteStateMachine* m_pFSM;
 	
 	std::vector<Integrian2D::GameObject*> m_Tiles{};
+	std::vector<Piece*> m_Pieces{};
 
 	PieceColour m_Turn;
 };
