@@ -83,10 +83,8 @@ void Piece::Move(TileComponent* const pDestinationTile) noexcept
 	m_pTileComponent->GetOwner()->AddComponent(pPieces[0]);
 	pPieces[0]->SetOwner(m_pTileComponent->GetOwner());
 
+	/* end the turn */
 	Chessboard::GetInstance()->EndTurn();
-
-	/* Set this piece's position to the center of the destination tile */
-	// m_pOwner->pTransform->SetPosition(m_pTileComponent->GetCenterOfTile());
 }
 
 void Piece::SetColourOfPiece(const PieceColour colour) noexcept
