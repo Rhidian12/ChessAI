@@ -27,7 +27,7 @@ void Pawn::Move(TileComponent* const pDestinationTile) noexcept
 {
 	Piece::Move(pDestinationTile);
 
-	/* the first time the pawn gets moved, this does not get set to true yet 
+	/* the first time the pawn gets moved, this does not get set to true yet
 		the second time the pawn moves, the boolean will get set to false again */
 	if (m_HasJustMoved)
 		m_HasJustMoved = false;
@@ -93,7 +93,41 @@ std::vector<TileComponent*> Pawn::GetPossibleMoves() const noexcept
 		}
 	}
 
-	/* [TODO] Should still check en passant */
+	/* check for en passant */
+	for (int i{}; i < amountOfTilesToCheck; ++i)
+	{
+		const int nextIndex{ currentTileIndex + possibleAttackMoves[i] };
+
+		/* safety check */
+		if (Integrian2D::Utils::IsInRange(nextIndex, 0, 63))
+		{
+			const int row{ pChessboard->GetRowNumber(currentTileIndex) };
+
+			/* make sure we're checking a pawn that's next to our current pawn */
+			if (pChessboard->GetRowNumber(nextIndex) == row)
+			{
+				TileComponent* const pTile{ pChessboard->GetTileComponent(nextIndex) };
+
+				/* safety check */
+				if (pTile)
+				{
+					if (Piece* const pPiece{ pTile->GetPiece() }; pPiece != nullptr)
+					{
+						/* we only care about other pawns */
+						if (pPiece->GetTypeOfPiece() == TypeOfPiece::Pawn)
+						{
+							/* if the pawn next to us just moved double, we can do en passant */
+							if (static_cast<Pawn*>(pPiece)->GetMovedDoubleLastTurn())
+							{
+								possibleMoves.push_back(pChessboard->GetTileComponent(nextIndex + (sign * rowMovement)));
+								break; /* we can only do en passant on one pawn */
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 	return possibleMoves;
 }
