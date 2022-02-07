@@ -5,9 +5,12 @@
 #include <Renderer/Renderer.h>
 #include <Components/TransformComponent/TransformComponent.h>
 #include <GameObject/GameObject.h>
+#include <EventQueue/EventQueue.h>
 
 #include "../TileComponent/TileComponent.h"
 #include "../Piece/Piece.h"
+#include "../Chessboard/Chessboard.h"
+#include "../Piece/Pawn/Pawn.h"
 
 namespace States
 {
@@ -157,11 +160,51 @@ namespace States
 
 			if (isMoveValid != potentialMoves.cend())
 			{
+				Chessboard* const pChessboard{ Chessboard::GetInstance() };
+
+				/* cache this in case it's a pawn */
+				const int originalTileIndex{ pChessboard->GetTileIndex(pSelectedPiece->GetOwner()->GetComponentByType<TileComponent>()) };
+
 				/* Move the piece */
 				pSelectedPiece->Move(pClickedTile);
 
+				/* if the piece is a pawn, check for en passant or whether we moved twice */
+				if (pSelectedPiece->GetTypeOfPiece() == TypeOfPiece::Pawn)
+				{
+					const int clickedTileIndex{ pChessboard->GetTileIndex(pClickedTile) };
+					const int sign{ pSelectedPiece->GetColourOfPiece() == PieceColour::White ? 1 : -1 };
+					constexpr int rowMovement{ 8 };
+
+					/* first check if we just moved twice */
+					if (abs(clickedTileIndex - originalTileIndex) == (rowMovement * 2))
+					{
+						static_cast<Pawn*>(pSelectedPiece)->SetMovedDouble(true);
+					}
+					/* else check if the move we're doing is en passant */
+					else
+					{
+						/* get the tile behind our pawn */
+						TileComponent* const pTileBehindPawn{ pChessboard->GetTileComponent(clickedTileIndex + (rowMovement * (-sign))) };
+
+						if (Piece* const pPiece{ pTileBehindPawn->GetPiece() }; pPiece != nullptr)
+						{
+							/* is the piece behind our pawn is a pawn as well */
+							if (pPiece->GetTypeOfPiece() == TypeOfPiece::Pawn)
+							{
+								/* check if it just moved double */
+								if (static_cast<Pawn*>(pPiece)->GetMovedDoubleLastTurn())
+								{
+									EventQueue::GetInstance()->QueueEvent("DeletePiece", pPiece);
+								}
+							}
+						}
+					}
+				}
+
 				pBlackboard->ChangeData("SelectedPiece", nullptr);
 				pBlackboard->ChangeData("WasPieceMoved", true);
+
+				Chessboard::GetInstance()->EndTurn();
 
 				return BehaviourState::Success;
 			}

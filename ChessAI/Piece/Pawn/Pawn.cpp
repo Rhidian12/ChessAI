@@ -41,7 +41,7 @@ std::vector<TileComponent*> Pawn::GetPossibleMoves() const noexcept
 	/* moving a row up is doing currentTileIndex + 8 */
 	/* First check the tile in front of the pawn */
 
-	int sign{ m_PieceColour == PieceColour::White ? 1 : -1 };
+	const int sign{ m_PieceColour == PieceColour::White ? 1 : -1 };
 	constexpr int rowMovement{ 8 };
 
 	constexpr int amountOfTilesToCheck{ 2 };
@@ -123,9 +123,9 @@ std::vector<TileComponent*> Pawn::GetPossibleMoves() const noexcept
 	return possibleMoves;
 }
 
-void Pawn::SetMovedDouble() noexcept
+void Pawn::SetMovedDouble(bool value) noexcept
 {
-	m_MovedDouble = true;
+	m_MovedDouble = value;
 }
 
 bool Pawn::GetMovedDoubleLastTurn() const noexcept

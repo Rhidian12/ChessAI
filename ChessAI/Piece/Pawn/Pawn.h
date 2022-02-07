@@ -13,8 +13,7 @@ public:
 
 	virtual std::vector<TileComponent*> GetPossibleMoves() const noexcept override;
 
-	void SetMovedDouble() noexcept;
-
+	void SetMovedDouble(bool value) noexcept;
 	bool GetMovedDoubleLastTurn() const noexcept;
 
 private:

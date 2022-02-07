@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Math/TypeDefines.h>
+#include <IListener/IListener.h>
 
 #include "../Piece/Piece.h"
 
@@ -16,11 +17,13 @@ namespace Integrian2D
 class TileComponent;
 class Piece;
 
-class Chessboard final
+class Chessboard final : public Integrian2D::IListener
 {
 public:
 	static Chessboard* const GetInstance() noexcept;
 	static void Cleanup() noexcept;
+
+	virtual bool OnEvent(const Integrian2D::Event& event) override;
 
 	~Chessboard() = default;
 
@@ -44,7 +47,6 @@ public:
 
 private:
 	Chessboard();
-	void HandleInput() noexcept;
 
 	inline static Chessboard* m_pInstance{};
 

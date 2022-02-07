@@ -13,6 +13,14 @@
 #include "../TileComponent/TileComponent.h"
 #include "../Commands/Commands.h"
 #include "../States/States.h"
+#include "../Piece/Pawn/Pawn.h"
+#include "../Piece/Bishop/Bishop.h"
+#include "../Piece/Knight/Knight.h"
+#include "../Piece/Rook/Rook.h"
+#include "../Piece/Queen/Queen.h"
+#include "../Piece/King/King.h"
+
+#include <algorithm>
 
 Chessboard::Chessboard()
 	: m_pBlackboard{}
@@ -90,16 +98,61 @@ void Chessboard::Cleanup() noexcept
 	Integrian2D::Utils::SafeDelete(m_pInstance);
 }
 
-void Chessboard::Update() noexcept
-{
-	//HandleInput();
-
-	m_pFSM->Update();
-}
-
-void Chessboard::HandleInput() noexcept
+bool Chessboard::OnEvent(const Integrian2D::Event& event)
 {
 	using namespace Integrian2D;
+
+	if (strcmp(event.event.GetEvent(), "DeletePiece") == 0)
+	{
+		Piece* const pPieceToBeDeleted{ event.event.GetData<Piece*>() };
+
+		/* remove piece reference from piece vector */
+		m_Pieces.erase(std::remove(m_Pieces.begin(), m_Pieces.end(), pPieceToBeDeleted), m_Pieces.end());
+
+		/* find piece in tile game objects and delete it */
+		auto tileIt{ std::find_if(m_Tiles.cbegin(), m_Tiles.cend(), [pPieceToBeDeleted](GameObject* const pG)->bool
+			{
+				for (Component* pC : pG->GetComponents())
+					if (Piece* const pPiece{ dynamic_cast<Piece*>(pC) }; pPiece != nullptr)
+						return pPiece == pPieceToBeDeleted;
+
+				return false;
+			}) };
+
+		if (tileIt != m_Tiles.cend())
+		{
+			switch (pPieceToBeDeleted->GetTypeOfPiece())
+			{
+			case TypeOfPiece::Pawn:
+				(*tileIt)->DeleteComponentByType<Pawn>();
+				break;
+			case TypeOfPiece::Bishop:
+				(*tileIt)->DeleteComponentByType<Bishop>();
+				break;
+			case TypeOfPiece::Knight:
+				(*tileIt)->DeleteComponentByType<Knight>();
+				break;
+			case TypeOfPiece::Rook:
+				(*tileIt)->DeleteComponentByType<Rook>();
+				break;
+			case TypeOfPiece::Queen:
+				(*tileIt)->DeleteComponentByType<Queen>();
+				break;
+			case TypeOfPiece::King:
+				(*tileIt)->DeleteComponentByType<King>();
+				break;
+			}
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
+void Chessboard::Update() noexcept
+{
+	m_pFSM->Update();
 }
 
 void Chessboard::SetTiles(const std::vector<Integrian2D::GameObject*>& tiles) noexcept
@@ -205,8 +258,18 @@ void Chessboard::EndTurn() noexcept
 {
 	m_Turn = static_cast<PieceColour>(~static_cast<std::underlying_type_t<PieceColour>>(m_Turn));
 
-	for (Piece* pPiece : m_Pieces)
+	for (Piece* const pPiece : m_Pieces)
 	{
-
+		if (pPiece->GetColourOfPiece() == m_Turn)
+		{
+			if (pPiece->GetTypeOfPiece() == TypeOfPiece::Pawn)
+			{
+				if (Pawn* const pPawn{ static_cast<Pawn*>(pPiece) }; pPawn->GetMovedDoubleLastTurn())
+				{
+					pPawn->SetMovedDouble(false);
+					break; /* only one piece needs to be checked */
+				}
+			}
+		}
 	}
 }

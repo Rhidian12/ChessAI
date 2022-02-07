@@ -82,9 +82,6 @@ void Piece::Move(TileComponent* const pDestinationTile) noexcept
 	m_pTileComponent->SetPiece(this);
 	m_pTileComponent->GetOwner()->AddComponent(pPieces[0]);
 	pPieces[0]->SetOwner(m_pTileComponent->GetOwner());
-
-	/* end the turn */
-	Chessboard::GetInstance()->EndTurn();
 }
 
 void Piece::SetColourOfPiece(const PieceColour colour) noexcept
