@@ -146,7 +146,7 @@ namespace Integrian2D
 	{
 		const std::type_info& typeInfo{ typeid(Type) };
 
-		for (Component* pC : m_pComponents)
+		for (Component*& pC : m_pComponents)
 			if (typeid(*pC) == typeInfo)
 				Utils::SafeDelete(pC);
 
