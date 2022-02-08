@@ -106,7 +106,7 @@ namespace HelperFunctions
 					return false;
 			}))->GetComponentByType<TileComponent>() };
 
-		const Piece* const pKing{ pKingTile->GetPiece() };
+		// const Piece* const pKing{ pKingTile->GetPiece() };
 
 		for (Piece* const pEnemyPiece : *pPieces)
 		{
@@ -126,16 +126,20 @@ namespace HelperFunctions
 						}) != possibleMoves.cend())
 					{
 						/* is it only our piece? */
-						for (const TileComponent* const pTile : possibleMoves)
-						{
-							/* is there a piece? */
-							if (Piece* const pPiece{ pTile->GetPiece() }; pPiece != nullptr)
-							{
-								/* ignore our king and selected piece */
-								if (pPiece != pKing && pPiece != pSelectedPiece)
-									return false;
-							}
-						}
+						//for (const TileComponent* const pTile : possibleMoves)
+						//{
+						//	/* is there a piece? */
+						//	if (Piece* const pPiece{ pTile->GetPiece() }; pPiece != nullptr)
+						//	{
+						//		/* ignore our king and selected piece */
+						//		if (pPiece != pKing && pPiece != pSelectedPiece)
+						//		{
+						//			/* if we're here, there's a piece that's neither the king or the selected piece */
+						//			/* check if the piece is in front of the king and blocking the attacking piece */
+
+						//		}
+						//	}
+						//}
 
 						/* if we didn't return false by now, it means there were no other pieces, and it would result in check */
 						return true;
