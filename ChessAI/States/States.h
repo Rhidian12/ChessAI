@@ -1,10 +1,20 @@
 ﻿#pragma once
 
+/* BehaviourState */
 #include <AI/DecisionMaking/FiniteStateMachine/FiniteStateMachine.h>
 
 namespace Integrian2D
 {
     class Blackboard;
+}
+
+class TileComponent;
+class Piece;
+
+namespace HelperFunctions
+{
+    void TakePiece(TileComponent* const pClickedTile, Piece* const pSelectedPiece);
+	bool IsMoveResultingInCheck(Integrian2D::Blackboard* const pBlackboard);
 }
 
 namespace States

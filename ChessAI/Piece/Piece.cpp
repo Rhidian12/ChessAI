@@ -72,9 +72,6 @@ void Piece::Move(TileComponent* const pDestinationTile, const bool) noexcept
 	}
 	m_pTileComponent->SetPiece(nullptr);
 
-	/* Next up, if there is a piece on the clicked tile, take it */
-	/* [TODO] Implement this */
-
 	/* Change our tile component to the new tile component */
 	m_pTileComponent = pDestinationTile;
 

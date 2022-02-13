@@ -88,7 +88,7 @@ namespace HelperFunctions
 		}
 	}
 
-	bool IsMoveResultingInCheck(Integrian2D::Blackboard* const pBlackboard, Piece* const pSelectedPiece)
+	bool IsMoveResultingInCheck(Integrian2D::Blackboard* const pBlackboard)
 	{
 		using namespace Integrian2D;
 
@@ -118,32 +118,7 @@ namespace HelperFunctions
 				/* is the king is POSSIBLY being threatened */
 				if (std::find(possibleMoves.cbegin(), possibleMoves.cend(), pKingTile) != possibleMoves.cend())
 				{
-					/* is our piece defending the king */
-					if (std::find_if(possibleMoves.cbegin(), possibleMoves.cend(),
-						[pSelectedPiece](const TileComponent* const pTile)->bool
-						{
-							return pTile->GetPiece() == pSelectedPiece;
-						}) != possibleMoves.cend())
-					{
-						/* is it only our piece? */
-						//for (const TileComponent* const pTile : possibleMoves)
-						//{
-						//	/* is there a piece? */
-						//	if (Piece* const pPiece{ pTile->GetPiece() }; pPiece != nullptr)
-						//	{
-						//		/* ignore our king and selected piece */
-						//		if (pPiece != pKing && pPiece != pSelectedPiece)
-						//		{
-						//			/* if we're here, there's a piece that's neither the king or the selected piece */
-						//			/* check if the piece is in front of the king and blocking the attacking piece */
-
-						//		}
-						//	}
-						//}
-
-						/* if we didn't return false by now, it means there were no other pieces, and it would result in check */
-						return true;
-					}
+					return true;
 				}
 			}
 		}
@@ -186,24 +161,42 @@ namespace States
 		if (it == pTiles->cend())
 			return BehaviourState::Failure;
 
-		const TileComponent* const pTile{ (*it)->GetComponentByType<TileComponent>() };
+		TileComponent* const pOriginalTile{ (*it)->GetComponentByType<TileComponent>() };
 
 		/* Safety check */
-		if (pTile)
+		if (pOriginalTile)
 		{
 			/* Does the tile have a piece */
-			if (const Piece* const pPiece{ pTile->GetPiece() }; pPiece != nullptr)
+			if (Piece* const pPiece{ pOriginalTile->GetPiece() }; pPiece != nullptr)
 			{
 				/* Is the piece of the correct colour */
 				if (pPiece->GetColourOfPiece() == *pPieceColour)
 				{
 					auto moves{ pPiece->GetPossibleMoves() };
-					for (const TileComponent* const pPossibleMove : moves)
+
+					/* safety check */
+					if (!moves.empty())
 					{
-						/* [TODO] Figure out why Circlef is causing linker issues! */
-						 //pRenderer->RenderFilledCircle(Circlef{pPossibleMove->GetCenterOfTile(), 5.f}); 
-						const Rectf center{ pPossibleMove->GetCenterOfTile().x - 12.5f, pPossibleMove->GetCenterOfTile().y - 12.5f, 25.f, 25.f };
-						pRenderer->RenderFilledRectangle(center);
+						/* do a ghost move */
+						pPiece->Move(moves[0], true);
+
+						/* Check if our move would result in a check, ergo is the move valid */
+						const bool wouldMoveResultInCheck{ HelperFunctions::IsMoveResultingInCheck(pBlackboard) };
+
+						/* undo the the ghost move */
+						pPiece->Move(pOriginalTile, true);
+
+						/* if the move would result in check, stop moving */
+						if (wouldMoveResultInCheck)
+							return BehaviourState::Failure;
+
+						for (const TileComponent* const pPossibleMove : moves)
+						{
+							/* [TODO] Figure out why Circlef is causing linker issues! */
+							 //pRenderer->RenderFilledCircle(Circlef{pPossibleMove->GetCenterOfTile(), 5.f}); 
+							const Rectf center{ pPossibleMove->GetCenterOfTile().x - 12.5f, pPossibleMove->GetCenterOfTile().y - 12.5f, 25.f, 25.f };
+							pRenderer->RenderFilledRectangle(center);
+						}
 					}
 				}
 			}
@@ -304,13 +297,13 @@ namespace States
 				TileComponent* const pOriginalTile{ pSelectedPiece->GetOwner()->GetComponentByType<TileComponent>() };
 
 				/* do a GHOST move, we already move the piece, but this will be nullified */
-				pSelectedPiece->Move(pClickedTile);
+				pSelectedPiece->Move(pClickedTile, true);
 
 				/* Check if our move would result in a check, ergo is the move valid */
-				const bool wouldMoveResultInCheck{ HelperFunctions::IsMoveResultingInCheck(pBlackboard, pSelectedPiece) };
+				const bool wouldMoveResultInCheck{ HelperFunctions::IsMoveResultingInCheck(pBlackboard) };
 
 				/* undo the GHOST move */
-				pSelectedPiece->Move(pOriginalTile);
+				pSelectedPiece->Move(pOriginalTile, true);
 
 				/* if the move would result in check, stop moving */
 				if (wouldMoveResultInCheck)
@@ -324,7 +317,7 @@ namespace States
 				HelperFunctions::TakePiece(pClickedTile, pSelectedPiece);
 
 				/* ACTUALLY Move the piece */
-				pSelectedPiece->Move(pClickedTile);
+				pSelectedPiece->Move(pClickedTile, false);
 
 				pBlackboard->ChangeData("SelectedPiece", nullptr);
 				pBlackboard->ChangeData("WasPieceMoved", true);
