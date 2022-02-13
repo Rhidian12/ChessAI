@@ -42,7 +42,7 @@ void Piece::Render() const
 	);
 }
 
-void Piece::Move(TileComponent* const pDestinationTile) noexcept
+void Piece::Move(TileComponent* const pDestinationTile, const bool) noexcept
 {
 	/* Remove the piece from the current tile */
 	std::vector<Component*> pPieces{};
