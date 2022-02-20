@@ -75,5 +75,9 @@ namespace Integrian2D
 
 		FSMState* m_pCurrentState;
 		FSMState* m_pPreviousState;
+
+#ifdef __INTEGRIAN2D__ENABLE_LOGGING__
+		bool m_IsFirstFrame;
+#endif
 	};
 }
