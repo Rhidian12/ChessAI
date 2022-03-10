@@ -38,7 +38,8 @@ public:
 
 	virtual void Render() const override;
 
-	virtual void Move(TileComponent* const pDestinationTile, const bool isGhostMove) noexcept;
+	virtual Piece* GhostMove(TileComponent* const pDestinationTile) noexcept;
+	virtual void Move(TileComponent* const pDestinationTile) noexcept;
 
 	virtual std::vector<TileComponent*> GetPossibleMoves() const noexcept = 0;
 

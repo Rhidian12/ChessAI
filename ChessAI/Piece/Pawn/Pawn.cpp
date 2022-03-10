@@ -23,15 +23,12 @@ Integrian2D::Component* Pawn::Clone(Integrian2D::GameObject* pOwner) noexcept
 	return pPawn;
 }
 
-void Pawn::Move(TileComponent* const pDestinationTile, const bool isGhostMove) noexcept
+void Pawn::Move(TileComponent* const pDestinationTile) noexcept
 {
-	Piece::Move(pDestinationTile, isGhostMove);
+	Piece::Move(pDestinationTile);
 
-	if (!isGhostMove)
-	{
-		/* notify when the pawn gets moved */
-		m_HasMoved = true;
-	}
+	/* notify when the pawn gets moved */
+	m_HasMoved = true;
 }
 
 std::vector<TileComponent*> Pawn::GetPossibleMoves() const noexcept

@@ -42,7 +42,53 @@ void Piece::Render() const
 	);
 }
 
-void Piece::Move(TileComponent* const pDestinationTile, const bool) noexcept
+Piece* Piece::GhostMove(TileComponent* const pDestinationTile) noexcept
+{
+	/* Remove the piece from the current tile */
+	std::vector<Component*> pPieces{};
+
+	/* Get the piece from the game object */
+	/* [CRINGE] figure out why the fuck i have to ask for the specific class instead of Component */
+	switch (m_TypeOfPiece)
+	{
+	case TypeOfPiece::Pawn:
+		m_pTileComponent->GetOwner()->RemoveAllComponentsByType<Pawn>(&pPieces);
+		break;
+	case TypeOfPiece::Bishop:
+		m_pTileComponent->GetOwner()->RemoveAllComponentsByType<Bishop>(&pPieces);
+		break;
+	case TypeOfPiece::Knight:
+		m_pTileComponent->GetOwner()->RemoveAllComponentsByType<Knight>(&pPieces);
+		break;
+	case TypeOfPiece::Rook:
+		m_pTileComponent->GetOwner()->RemoveAllComponentsByType<Rook>(&pPieces);
+		break;
+	case TypeOfPiece::Queen:
+		m_pTileComponent->GetOwner()->RemoveAllComponentsByType<Queen>(&pPieces);
+		break;
+	case TypeOfPiece::King:
+		m_pTileComponent->GetOwner()->RemoveAllComponentsByType<King>(&pPieces);
+		break;
+	}
+	m_pTileComponent->SetPiece(nullptr);
+
+	/* Check if the destination tile has a piece on it */
+	Piece* pOriginalPiece{};
+	if (Piece* const pPiece{ pDestinationTile->GetPiece() }; pPiece != nullptr)
+		pOriginalPiece = pPiece;
+
+	/* Change our tile component to the new tile component */
+	m_pTileComponent = pDestinationTile;
+
+	/* Set the piece to our destination tile */
+	m_pTileComponent->SetPiece(this);
+	m_pTileComponent->GetOwner()->AddComponent(pPieces[0]);
+	pPieces[0]->SetOwner(m_pTileComponent->GetOwner());
+
+	return pOriginalPiece;
+}
+
+void Piece::Move(TileComponent* const pDestinationTile) noexcept
 {
 	/* Remove the piece from the current tile */
 	std::vector<Component*> pPieces{};
