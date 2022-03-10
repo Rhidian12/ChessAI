@@ -253,6 +253,11 @@ void Chessboard::ToggleIsEscapePressed(const std::string& file) noexcept
 	Integrian2D::ASSERT(file.find("Commands.cpp") != std::string::npos, "Chessboard::ToggleIsEscapePressed() > Only Commands may call this function!");
 
 	m_pBlackboard->ChangeData("WasEscapePressed", true);
+	m_pBlackboard->ChangeData("LMBMousePosition", Integrian2D::Point2f{});
+	m_pBlackboard->ChangeData("RMBMousePosition", Integrian2D::Point2f{});
+	m_pBlackboard->ChangeData("HasUserLeftClicked", false);
+	m_pBlackboard->ChangeData("HasUserRightClicked", false);
+	m_pBlackboard->ChangeData("SelectedPiece", nullptr);
 }
 
 void Chessboard::EndTurn() noexcept
