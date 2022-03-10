@@ -80,7 +80,7 @@ namespace HelperFunctions
 				case TypeOfPiece::Rook:
 				case TypeOfPiece::Queen:
 				case TypeOfPiece::King:
-					if (Piece* const pPiece{ pClickedTile->GetPiece() }; pPiece != nullptr)
+					if (Piece* const pPiece{ pClickedTile->GetPiece() }; pPiece != nullptr && pPiece->GetColourOfPiece() != pSelectedPiece->GetColourOfPiece())
 						EventQueue::GetInstance()->QueueEvent("DeletePiece", pPiece);
 					break;
 				}
